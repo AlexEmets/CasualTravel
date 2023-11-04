@@ -1,7 +1,7 @@
 package com.example.restservice.models;
 import jakarta.persistence.*;
-import org.hibernate.mapping.List;
-import org.hibernate.mapping.Set;
+
+import java.util.Set;
 
 @Entity
 @Table
