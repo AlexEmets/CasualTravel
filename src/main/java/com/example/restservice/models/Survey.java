@@ -10,7 +10,9 @@ public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyID;
-    @OneToMany(mappedBy = "surveyID")
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "questionID")
     private List<Question> questions;
     public Survey() {
     }

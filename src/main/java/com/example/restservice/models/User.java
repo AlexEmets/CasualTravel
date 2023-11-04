@@ -5,7 +5,7 @@ import java.util.List;
 
 
 @Entity
-@Table
+@Table(name = "app_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,8 +15,8 @@ public class User {
     private String email;
     private String avatar;
 
-    @OneToMany
-    @JoinColumn(name = "userID")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "interestID")
     private List<Interest> interests;
 
     public User() {
