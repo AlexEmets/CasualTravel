@@ -1,6 +1,7 @@
 package com.example.restservice.models;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,8 +16,12 @@ public class User {
     private String email;
     private String avatar;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "interestID")
+    @ManyToMany
+    @JoinTable(
+            name = "user_interest",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userID"),
+            inverseJoinColumns = @JoinColumn(name = "interest_id", referencedColumnName = "interestID")
+    )
     private List<Interest> interests;
 
     public User() {
@@ -78,5 +83,21 @@ public class User {
 
     public void setInterests(List<Interest> interests) {
         this.interests = interests;
+    }
+    public void addInterest(Interest interest) {
+        if (interests == null) {
+            interests = new ArrayList<>();
+        }
+        if (!interests.contains(interest)) {
+            interests.add(interest);
+            interest.getUsers().add(this);
+        }
+    }
+
+    public void removeInterest(Interest interest) {
+        if (interests != null && interests.contains(interest)) {
+            interests.remove(interest);
+            interest.getUsers().remove(this);
+        }
     }
 }

@@ -39,4 +39,14 @@ public class InterestController {
     public void deleteInterest(@PathVariable Long interestId) {
         interestService.deleteInterest(interestId);
     }
+
+    @PostMapping("/{interestId}/users/{userId}")
+    public void addInterestToUser(@PathVariable Long interestId, @PathVariable Long userId) {
+        interestService.addInterestToUser(interestId, userId);
+    }
+
+    @DeleteMapping("/{interestId}/users/{userId}")
+    public void removeInterestFromUser(@PathVariable Long interestId, @PathVariable Long userId) {
+        interestService.removeInterestFromUser(interestId, userId);
+    }
 }
