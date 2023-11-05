@@ -1,4 +1,5 @@
 package com.example.restservice.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -11,12 +12,13 @@ public class Interest {
     private Long interestID;
     private String name;
     private String description;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_interest",
             joinColumns = @JoinColumn(name = "interest_id" ,referencedColumnName = "interestID"),
             inverseJoinColumns = @JoinColumn(name = "user_id" , referencedColumnName = "userID")
     )
+    @JsonIgnore
     private List<User> users;
 
     public Interest() {

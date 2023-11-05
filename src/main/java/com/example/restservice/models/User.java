@@ -1,4 +1,5 @@
 package com.example.restservice.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class User {
     private String email;
     private String avatar;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_interest",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userID"),
@@ -90,14 +91,12 @@ public class User {
         }
         if (!interests.contains(interest)) {
             interests.add(interest);
-            interest.getUsers().add(this);
         }
     }
 
     public void removeInterest(Interest interest) {
         if (interests != null && interests.contains(interest)) {
             interests.remove(interest);
-            interest.getUsers().remove(this);
         }
     }
 }
