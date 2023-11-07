@@ -42,9 +42,9 @@ public class QuestionController {
     }
 
     @PostMapping("/{questionId}/addsurvey/{surveyId}")
-    public Question addSurvey(@PathVariable Long questionId,@PathVariable Long surveyId)
+    public void addSurvey(@PathVariable Long questionId,@PathVariable Long surveyId)
     {
-       return questionService.addToSurveyUsingGetById(questionId,surveyId);
+      questionService.addToSurveyUsingGetById(questionId,surveyId);
     }
 
 }

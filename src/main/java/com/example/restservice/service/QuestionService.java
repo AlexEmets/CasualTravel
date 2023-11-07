@@ -44,11 +44,11 @@ public class QuestionService {
     public void deleteQuestion(Long questionID) {
         questionRepository.deleteById(questionID);
     }
-    public Question addToSurveyUsingGetById(Long questionId,Long surveyId) {
+    public void addToSurveyUsingGetById(Long questionId,Long surveyId) {
         Survey survey = surveyRepository.getById(surveyId);
         Question question = questionRepository.getById(questionId);
         question.setSurvey(survey);
         question = questionRepository.save(question);
-        return question;
+
     }
 }

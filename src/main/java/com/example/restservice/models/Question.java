@@ -1,14 +1,13 @@
 package com.example.restservice.models;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import java.io.Serializable;
+
 
 import java.util.Set;
 
 @Entity
 @Table
-public class Question {
+public class Question implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionID;
@@ -29,8 +28,7 @@ public class Question {
     @Column(name = "answer")
     private Set<String> answerOptions;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne
     private Survey survey;
     public Question() {
     }
