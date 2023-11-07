@@ -1,6 +1,7 @@
 package com.example.restservice.models;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -11,17 +12,13 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyID;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "questionID")
-    private List<Question> questions;
     public Survey() {
     }
 
     public Survey(Long surveyID, List<Question> questions) {
         this.surveyID = surveyID;
-        this.questions = questions;
-    }
 
+    }
     public Long getSurveyID() {
         return surveyID;
     }
@@ -29,13 +26,4 @@ public class Survey {
     public void setSurveyID(Long surveyID) {
         this.surveyID = surveyID;
     }
-
-    public List<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
-    }
-
 }

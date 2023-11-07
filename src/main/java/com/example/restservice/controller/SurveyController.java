@@ -5,38 +5,41 @@ import com.example.restservice.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/surveys")
 public class SurveyController {
-    private final SurveyService surveyService;
 
     @Autowired
-    public SurveyController(SurveyService surveyService) {
-        this.surveyService = surveyService;
-    }
+    private SurveyService surveyService;
 
     @PostMapping
     public Survey createSurvey(@RequestBody Survey survey) {
         return surveyService.createSurvey(survey);
     }
 
+    @GetMapping("/{surveyID}")
+    public Survey getSurvey(@PathVariable Long surveyID) {
+        return surveyService.getSurvey(surveyID);
+    }
+
     @GetMapping
-    public Iterable<Survey> getAllSurveys() {
-        return surveyService.getAllSurveys();
+    public List<Survey> listSurveys() {
+        return surveyService.listSurveys();
     }
 
-    @GetMapping("/{surveyId}")
-    public Survey getSurveyById(@PathVariable Long surveyId) {
-        return surveyService.getSurveyById(surveyId).orElse(null);
+    @PutMapping("/{surveyID}")
+    public Survey updateSurvey(@PathVariable Long surveyID, @RequestBody Survey updatedSurvey) {
+        return surveyService.updateSurvey(surveyID, updatedSurvey);
     }
 
-    @PutMapping("/{surveyId}")
-    public void updateSurvey(@PathVariable Long surveyId, @RequestBody Survey survey) {
-        surveyService.updateSurvey(survey);
+    @DeleteMapping("/{surveyID}")
+    public void deleteSurvey(@PathVariable Long surveyID) {
+        surveyService.deleteSurvey(surveyID);
     }
 
-    @DeleteMapping("/{surveyId}")
-    public void deleteSurvey(@PathVariable Long surveyId) {
-        surveyService.deleteSurvey(surveyId);
-    }
 }

@@ -1,42 +1,50 @@
 package com.example.restservice.controller;
 
 import com.example.restservice.models.Question;
+import com.example.restservice.models.Survey;
 import com.example.restservice.service.QuestionService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/questions")
 public class QuestionController {
-    private final QuestionService questionService;
 
     @Autowired
-    public QuestionController(QuestionService questionService) {
-        this.questionService = questionService;
-    }
+    private QuestionService questionService;
 
     @PostMapping
     public Question createQuestion(@RequestBody Question question) {
         return questionService.createQuestion(question);
     }
 
+    @GetMapping("/{questionID}")
+    public Question getQuestion(@PathVariable Long questionID) {
+        return questionService.getQuestion(questionID);
+    }
+
     @GetMapping
-    public Iterable<Question> getAllQuestions() {
-        return questionService.getAllQuestions();
+    public List<Question> listQuestions() {
+        return questionService.listQuestions();
     }
 
-    @GetMapping("/{questionId}")
-    public Question getQuestionById(@PathVariable Long questionId) {
-        return questionService.getQuestionById(questionId).orElse(null);
+    @PutMapping("/{questionID}")
+    public Question updateQuestion(@PathVariable Long questionID, @RequestBody Question updatedQuestion) {
+        return questionService.updateQuestion(questionID, updatedQuestion);
     }
 
-    @PutMapping("/{questionId}")
-    public void updateQuestion(@PathVariable Long questionId, @RequestBody Question question) {
-        questionService.updateQuestion(question);
+    @DeleteMapping("/{questionID}")
+    public void deleteQuestion(@PathVariable Long questionID) {
+        questionService.deleteQuestion(questionID);
     }
 
-    @DeleteMapping("/{questionId}")
-    public void deleteQuestion(@PathVariable Long questionId) {
-        questionService.deleteQuestion(questionId);
+    @PostMapping("/{questionId}/addsurvey/{surveyId}")
+    public Question addSurvey(@PathVariable Long questionId,@PathVariable Long surveyId)
+    {
+       return questionService.addToSurveyUsingGetById(questionId,surveyId);
     }
+
 }

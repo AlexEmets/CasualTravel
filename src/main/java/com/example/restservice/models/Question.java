@@ -1,5 +1,8 @@
 package com.example.restservice.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Set;
 
@@ -11,11 +14,33 @@ public class Question {
     private Long questionID;
     private String text;
 
+    @Override
+    public String toString() {
+        return "Question{" +
+                "questionID=" + questionID +
+                ", text='" + text + '\'' +
+                ", answerOptions=" + answerOptions +
+                ", survey=" + survey +
+                '}';
+    }
+
     @ElementCollection
     @CollectionTable(name="answerOption", joinColumns = @JoinColumn(name = "questionID"))
     @Column(name = "answer")
     private Set<String> answerOptions;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Survey survey;
     public Question() {
+    }
+
+    public Survey getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
     }
 
     public Question(Long questionID, String text, Set<String> answerOptions) {
