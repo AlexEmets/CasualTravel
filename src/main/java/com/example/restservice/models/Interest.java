@@ -13,14 +13,26 @@ public class Interest implements Serializable {
     private Long interestID;
     private String name;
     private String description;
+    private String imageURL;
+    private boolean type;
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_interest",
-            joinColumns = @JoinColumn(name = "interest_id" ,referencedColumnName = "interestID"),
-            inverseJoinColumns = @JoinColumn(name = "user_id" , referencedColumnName = "userID")
+            joinColumns = @JoinColumn(name = "interestId" ,referencedColumnName = "interestID"),
+            inverseJoinColumns = @JoinColumn(name = "userId" , referencedColumnName = "userID")
     )
     @JsonIgnore
     private List<User> users;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "place_interest",
+            joinColumns = @JoinColumn(name = "interestId" ,referencedColumnName = "interestID"),
+            inverseJoinColumns = @JoinColumn(name = "placeId" , referencedColumnName = "placeID")
+    )
+    @JsonIgnore
+    private List<Place> places;
+
 
     public Interest() {
 
@@ -57,5 +69,24 @@ public class Interest implements Serializable {
     }
     public List<User> getUsers() {
         return users;
+    }
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public boolean isType() {
+        return type;
+    }
+
+    public void setType(boolean type) {
+        this.type = type;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }
