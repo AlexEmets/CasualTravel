@@ -1,21 +1,28 @@
 package com.example.restservice.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
 @Entity
 @Table(name = "app_user")
-public class User implements Serializable {
+@Builder
+@AllArgsConstructor
+public class User implements Serializable, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userID;
     private String username;
-    private String password;
     private String email;
+    private String password;
     private String avatar;
     private Integer betterThenPercentages;
 
@@ -38,7 +45,7 @@ public class User implements Serializable {
 
     }
 
-    public User(Long userID, String username, String password, String email, String avatar, List<Interest> interests, List<Achievement> achievements) {
+    public User(Long userID, String username,  String email, String password, String avatar, List<Interest> interests, List<Achievement> achievements) {
         this.userID = userID;
         this.username = username;
         this.password = password;
@@ -131,4 +138,33 @@ public class User implements Serializable {
             achievements.remove(interest);
         }
     }
+
+
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
 }
