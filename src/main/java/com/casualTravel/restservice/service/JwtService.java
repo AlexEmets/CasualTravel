@@ -1,8 +1,6 @@
 package com.casualTravel.restservice.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
@@ -20,7 +18,8 @@ public class JwtService {
 
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
-    public String extractUsername(String token) {
+
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -45,13 +44,28 @@ public class JwtService {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000*60*24))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                //.signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        try {
+            final String userEmail = extractEmail(token);
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return (userEmail.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        } catch (MalformedJwtException e) {
+            System.out.println("Invalid JWT token: {}" + e.getMessage());
+        } catch (ExpiredJwtException e) {
+            System.out.println("JWT token is expired: {}" + e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            System.out.println("JWT token is unsupported: {}" + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("JWT claims string is empty: {}" + e.getMessage());
+        } catch (SignatureException e) {
+            System.out.println("Signature validation failed" + e);
+        }
+        return false;
     }
 
     private boolean isTokenExpired(String token) {
@@ -65,7 +79,7 @@ public class JwtService {
     private Claims extractAllClaims(String token){
         return Jwts
                 .parserBuilder()
-                .setSigningKey(getSignInKey())
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
