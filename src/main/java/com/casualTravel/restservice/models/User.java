@@ -39,6 +39,8 @@ public class User implements Serializable, UserDetails {
             inverseJoinColumns = @JoinColumn(name = "achievementId", referencedColumnName = "achievementId")
     )
     private List<Achievement> achievements;
+    @OneToMany(mappedBy = "user")
+    private List<UserPlace> userPlaces;
 
     public User() {
 
