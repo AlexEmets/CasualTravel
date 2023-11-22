@@ -3,6 +3,7 @@ package com.casualTravel.restservice.models;
 import jakarta.persistence.*;
 
 import java.util.List;
+import javax.xml.crypto.Data;
 
 @Entity
 @Table
@@ -13,6 +14,7 @@ public class Place {
     private Long googleID;
     private String positionX;
     private String getPositionY;
+    private Float visitCost;
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "place_interest",
@@ -20,6 +22,10 @@ public class Place {
             inverseJoinColumns = @JoinColumn(name = "interestId", referencedColumnName = "interestID")
     )
     private List<Interest> interests;
+
+    @OneToMany(mappedBy = "place")
+    private List<UserPlace> userPlaces;
+
 
     public Place() {
 
