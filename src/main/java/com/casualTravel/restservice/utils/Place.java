@@ -17,14 +17,58 @@ public class Place {
 
     public double longitude;
     private double latitude;
+
+    private double natureCoef;
+    private double funCoef;
+    private double historyCoef;
+    private double artCoef;
+
+
+    public double getNatureCoef() {
+        return natureCoef;
+    }
+
+    public double getFunCoef() {
+        return funCoef;
+    }
+
+    public double getHistoryCoef() {
+        return historyCoef;
+    }
+
+    public double getArtCoef() {
+        return artCoef;
+    }
+
+    public void setNatureCoef(double natureCoef) {
+        this.natureCoef = natureCoef;
+    }
+
+    public void setFunCoef(double funCoef) {
+        this.funCoef = funCoef;
+    }
+
+    public void setHistoryCoef(double historyCoef) {
+        this.historyCoef = historyCoef;
+    }
+    public void setArtCoef(double artCoef) {
+        this.artCoef = artCoef;
+    }
     Map<Place, Double> adjacentNodes = new HashMap<>();
 
     public void addDestination(Place destination, double distance) {
         adjacentNodes.put(destination, distance);
     }
 
-    public Place(String name) {
+
+    public Place(String name, double longitude, double latitude, double natureCoef, double historyCoef, double funCoef, double artCoef) {
         this.name = name;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.natureCoef = natureCoef;
+        this.funCoef = funCoef;
+        this.historyCoef = historyCoef;
+        this.artCoef = artCoef;
     }
 
     public void setDistance(Double distance) {

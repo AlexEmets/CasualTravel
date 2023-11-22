@@ -4,6 +4,51 @@ import java.util.*;
 
 public class RouteGenerator {
 
+    private double userNatureCoef;
+    private double userFunCoef;
+    private double userHistoryCoef;
+    private double userArtCoef;
+
+
+    public RouteGenerator(Set<Place> places, double userNatureCoef, double userFunCoef, double userHistoryCoef, double userArtCoef) {
+        this.userNatureCoef = userNatureCoef;
+        this.userFunCoef = userFunCoef;
+        this.userHistoryCoef = userHistoryCoef;
+        this.userArtCoef = userArtCoef;
+        fillGraphWithPlaces(places);
+    }
+
+    public double getNatureCoef() {
+        return userNatureCoef;
+    }
+
+    public double getFunCoef() {
+        return userFunCoef;
+    }
+
+    public double getHistoryCoef() {
+        return userHistoryCoef;
+    }
+
+    public double getArtCoef() {
+        return userArtCoef;
+    }
+
+
+    public void setNatureCoef(double natureCoef) {
+        this.userNatureCoef = natureCoef;
+    }
+
+    public void setFunCoef(double funCoef) {
+        this.userFunCoef = funCoef;
+    }
+
+    public void setHistoryCoef(double historyCoef) {
+        this.userHistoryCoef = historyCoef;
+    }
+    public void setArtCoef(double artCoef) {
+        this.userArtCoef = artCoef;
+    }
     private final Set<Place> allPlaces = new HashSet<>();
 
     public void addPlace(Place nodeA) {
@@ -64,13 +109,12 @@ public class RouteGenerator {
         }
     }
 
-    // TODO: MAIN THING TO FINISH
+    // TODO
     private int calculateInterestValue(Place place)
     {
-        Random random = new Random();
-        return random.nextInt(20) + 1;
+        return (int) (1000*(userArtCoef * place.getArtCoef() + userNatureCoef * place.getNatureCoef() + userFunCoef * place.getFunCoef() + userHistoryCoef * place.getHistoryCoef()));
     }
-    private void fillGraphWithPlaces(Set<Place> places) {
+    public void fillGraphWithPlaces(Set<Place> places) {
         for (Place p : places) {
             p.setInterestValue(calculateInterestValue(p));
         }
@@ -82,6 +126,7 @@ public class RouteGenerator {
                     place1.addDestination(place2, distance);
                 }
             }
+            addPlace(place1); // add every place from function parameter to our graph
         }
     }
 
@@ -117,5 +162,23 @@ public class RouteGenerator {
 
     public Set<Place> getNodes() {
         return allPlaces;
+    }
+
+    public List<Place> generateRoute(Place placeStart, Place placeFinish) {
+        var graph = RouteGenerator.calculateShortestPathFromSource(this, placeStart);
+
+        LinkedList<Place> route = new LinkedList<>(placeFinish.getShortestPath());
+        route.add(placeFinish); // Додаємо placeFinish в кінець списку
+
+        return route;
+    }
+
+    public static void printRoute(List<Place> places) {
+        for (int i = 0; i < places.size(); i++) {
+            System.out.print(places.get(i).getName());
+            if (i < places.size() - 1) {
+                System.out.print(" ---> ");
+            }
+        }
     }
 }
