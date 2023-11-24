@@ -3,7 +3,6 @@ package com.casualTravel.restservice.models;
 import jakarta.persistence.*;
 
 import java.util.List;
-import javax.xml.crypto.Data;
 
 @Entity
 @Table

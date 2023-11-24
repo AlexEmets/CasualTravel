@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -23,10 +24,11 @@ public class Question implements Serializable{
                 '}';
     }
 
-    @ElementCollection
-    @CollectionTable(name="answerOption", joinColumns = @JoinColumn(name = "questionID"))
-    @Column(name = "answer")
-    private Set<String> answerOptions;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "answerOption", joinColumns = @JoinColumn(name = "questionID"))
+    @MapKeyColumn(name = "answerText")
+    @Column(name = "interestId")
+    private Map<String, Integer> answerOptions;
 
     @ManyToOne
     private Survey survey;
@@ -41,7 +43,7 @@ public class Question implements Serializable{
         this.survey = survey;
     }
 
-    public Question(Long questionID, String text, Set<String> answerOptions) {
+    public Question(Long questionID, String text, Map<String, Integer> answerOptions) {
         this.questionID = questionID;
         this.text = text;
         this.answerOptions = answerOptions;
@@ -63,11 +65,11 @@ public class Question implements Serializable{
         this.text = text;
     }
 
-    public Set<String> getAnswerOptions() {
+    public Map<String, Integer> getAnswerOptions() {
         return answerOptions;
     }
 
-    public void setAnswerOptions(Set<String> answerOptions) {
+    public void setAnswerOptions(Map<String, Integer> answerOptions) {
         this.answerOptions = answerOptions;
     }
 }

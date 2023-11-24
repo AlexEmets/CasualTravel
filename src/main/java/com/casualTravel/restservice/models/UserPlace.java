@@ -32,8 +32,7 @@ public class UserPlace {
 
   }
 
-  public UserPlace(Long id, Place place, User user, LocalDateTime timeField) {
-    this.id = id;
+  public UserPlace(User user, Place place, LocalDateTime timeField) {
     this.place = place;
     this.user = user;
     this.timeField = timeField;

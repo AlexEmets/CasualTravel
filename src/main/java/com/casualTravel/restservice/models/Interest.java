@@ -38,8 +38,7 @@ public class Interest implements Serializable {
 
     }
 
-    public Interest(Long interestID, String name, String description) {
-        this.interestID = interestID;
+    public Interest(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -67,9 +66,11 @@ public class Interest implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public List<User> getUsers() {
         return users;
     }
+
     public String getImageURL() {
         return imageURL;
     }

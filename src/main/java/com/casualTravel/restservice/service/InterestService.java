@@ -4,21 +4,22 @@ import com.casualTravel.restservice.models.Interest;
 import com.casualTravel.restservice.models.User;
 import com.casualTravel.restservice.repository.InterestRepository;
 import com.casualTravel.restservice.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class InterestService {
     private final InterestRepository interestRepository;
     private final UserRepository userRepository;
 
-    @Autowired
-    public InterestService(InterestRepository interestRepository, UserRepository userRepository) {
-        this.interestRepository = interestRepository;
-        this.userRepository = userRepository;
-    }
+//    @Autowired
+//    public InterestService(InterestRepository interestRepository, UserRepository userRepository) {
+//        this.interestRepository = interestRepository;
+//        this.userRepository = userRepository;
+//    }
 
     public Interest createInterest(Interest interest) {
         return interestRepository.save(interest);
@@ -32,8 +33,22 @@ public class InterestService {
         return interestRepository.findById(interestId);
     }
 
-    public void updateInterest(Interest interest) {
-        interestRepository.save(interest);
+//    public void updateInterest(Interest interest) {
+//        interestRepository.save(interest);
+//    }
+    public Interest updateInterest(Long interestId, Interest updatedInterest) {
+        Optional<Interest> existingInterestOptional = interestRepository.findById(interestId);
+
+        if (existingInterestOptional.isPresent()) {
+            Interest existingInterest = existingInterestOptional.get();
+            existingInterest.setName(updatedInterest.getName());
+            existingInterest.setDescription(updatedInterest.getDescription());
+
+            return interestRepository.save(existingInterest);
+        } else {
+            // Handle case where the achievement with the given ID is not found
+            throw new IllegalArgumentException("Achievement with ID " + interestId + " not found");
+        }
     }
 
     public void deleteInterest(Long interestId) {

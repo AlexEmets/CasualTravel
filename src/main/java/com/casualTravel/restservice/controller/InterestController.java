@@ -32,7 +32,7 @@ public class InterestController {
 
     @PutMapping("/{interestId}")
     public void updateInterest(@PathVariable Long interestId, @RequestBody Interest interest) {
-        interestService.updateInterest(interest);
+        interestService.updateInterest(interestId, interest);
     }
 
     @DeleteMapping("/{interestId}")

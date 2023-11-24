@@ -111,6 +111,7 @@ public class User implements Serializable, UserDetails {
     public void setInterests(List<Interest> interests) {
         this.interests = interests;
     }
+
     public void addInterest(Interest interest) {
         if (interests == null) {
             interests = new ArrayList<>();
@@ -125,18 +126,19 @@ public class User implements Serializable, UserDetails {
             interests.remove(interest);
         }
     }
-    public void addAchievement(Achievement interest) {
+
+    public void addAchievement(Achievement achievement) {
         if (achievements == null) {
             achievements = new ArrayList<>();
         }
-        if (!achievements.contains(interest)) {
-            achievements.add(interest);
+        if (!achievements.contains(achievement)) {
+            achievements.add(achievement);
         }
     }
 
-    public void removeAchievement(Achievement interest) {
-        if (achievements != null && achievements.contains(interest)) {
-            achievements.remove(interest);
+    public void removeAchievement(Achievement achievement) {
+        if (achievements != null && achievements.contains(achievement)) {
+            achievements.remove(achievement);
         }
     }
 
