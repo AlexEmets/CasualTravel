@@ -1,47 +1,27 @@
 package com.casualTravel.restservice.models;
 import jakarta.persistence.*;
 import java.io.Serializable;
-
-
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table
-public class Question implements Serializable{
+public class Question implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionID;
     private String text;
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "questionID=" + questionID +
-                ", text='" + text + '\'' +
-                ", answerOptions=" + answerOptions +
-                ", survey=" + survey +
-                '}';
-    }
-
-    @ElementCollection
-    @CollectionTable(name="answerOption", joinColumns = @JoinColumn(name = "questionID"))
-    @Column(name = "answer")
-    private Set<String> answerOptions;
-
     @ManyToOne
     private Survey survey;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Answer> answerOptions;
+
+    // Конструктори, геттери, сеттери і toString метод
     public Question() {
     }
 
-    public Survey getSurvey() {
-        return survey;
-    }
-
-    public void setSurvey(Survey survey) {
-        this.survey = survey;
-    }
-
-    public Question(Long questionID, String text, Set<String> answerOptions) {
+    public Question(Long questionID, String text, List<Answer> answerOptions) {
         this.questionID = questionID;
         this.text = text;
         this.answerOptions = answerOptions;
@@ -63,11 +43,29 @@ public class Question implements Serializable{
         this.text = text;
     }
 
-    public Set<String> getAnswerOptions() {
+    public List<Answer> getAnswerOptions() {
         return answerOptions;
     }
 
-    public void setAnswerOptions(Set<String> answerOptions) {
+    public void setAnswerOptions(List<Answer> answerOptions) {
         this.answerOptions = answerOptions;
+    }
+
+    public Survey getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "questionID=" + questionID +
+                ", text='" + text + '\'' +
+                ", answerOptions=" + answerOptions +
+                ", survey=" + survey +
+                '}';
     }
 }
