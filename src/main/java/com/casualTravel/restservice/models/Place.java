@@ -3,6 +3,7 @@ package com.casualTravel.restservice.models;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table
@@ -16,13 +17,20 @@ public class Place {
     private String positionY;
     private int visitTime;
     private Float visitCost;
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "place_interest",
-            joinColumns = @JoinColumn(name = "placeId", referencedColumnName = "placeID"),
-            inverseJoinColumns = @JoinColumn(name = "interestId", referencedColumnName = "interestID")
-    )
-    private List<Interest> interests;
+
+//    @ManyToMany(cascade = CascadeType.PERSIST)
+//    @JoinTable(
+//            name = "place_interest",
+//            joinColumns = @JoinColumn(name = "placeId", referencedColumnName = "placeID"),
+//            inverseJoinColumns = @JoinColumn(name = "interestId", referencedColumnName = "interestID")
+//    )
+//    private List<Interest> interests;
+
+    @ElementCollection
+    @CollectionTable(name="place_interest", joinColumns = @JoinColumn(name = "placeId"))
+    @MapKeyJoinColumn(name = "interestId")
+    @Column(name = "interest_weight")
+    private Map<Interest, Double> interests;
 
     @OneToMany(mappedBy = "place")
     private List<UserPlace> userPlaces;
@@ -32,7 +40,7 @@ public class Place {
 
     }
 
-    public Place(Long placeID, Long googleID, String positionX, String positionY, List<Interest> interests) {
+    public Place(Long placeID, Long googleID, String positionX, String positionY, Map<Interest, Double> interests) {
         this.placeID = placeID;
         this.googleID = googleID;
         this.positionX = positionX;
@@ -72,11 +80,11 @@ public class Place {
         this.positionY = getPositionY;
     }
 
-    public List<Interest> getInterests() {
+    public Map<Interest, Double> getInterests() {
         return interests;
     }
 
-    public void setInterests(List<Interest> interests) {
+    public void setInterests(Map<Interest, Double> interests) {
         this.interests = interests;
     }
 

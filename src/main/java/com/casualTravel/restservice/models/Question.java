@@ -19,6 +19,7 @@ public class Question implements Serializable{
 //    private Map<String, Integer> answerOptions;
 
     @ManyToOne
+    @JoinColumn(name = "survey_surveyId", referencedColumnName = "surveyID")
     private Survey survey;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

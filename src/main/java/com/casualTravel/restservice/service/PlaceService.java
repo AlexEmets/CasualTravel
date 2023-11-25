@@ -1,5 +1,6 @@
 package com.casualTravel.restservice.service;
 
+import com.casualTravel.restservice.dto.InterestDTO;
 import com.casualTravel.restservice.models.*;
 import com.casualTravel.restservice.repository.PlaceRepository;
 import com.casualTravel.restservice.repository.UserPlaceRepository;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,10 +30,6 @@ public class PlaceService {
 
     public Optional<Place> getPlaceByGoogleId(Long placeGoogleId) {
         return placeRepository.findByGoogleID(placeGoogleId);
-    }
-
-    public List<Place> getPlacesByInterest(Long interestId) {
-        return placeRepository.findByInterestsInterestID(interestId);
     }
 
     public Place createPlace(Place place) {
@@ -55,6 +54,20 @@ public class PlaceService {
 
         // Видаляємо UserPlace, якщо знайдено
         userPlaceOptional.ifPresent(userPlaceRepository::delete);
+    }
+
+    public List<InterestDTO> getInterestsDTO(Map<Interest, Double> interests) {
+        return interests.entrySet().stream()
+                .map(entry -> mapToInterestDTO(entry.getKey()))
+                .collect(Collectors.toList());
+    }
+
+    private InterestDTO mapToInterestDTO(Interest interest) {
+        return new InterestDTO(
+                interest.getInterestID(),
+                interest.getName(),
+                interest.getImageURL()
+        );
     }
 
 }
