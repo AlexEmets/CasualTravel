@@ -33,15 +33,17 @@ public class Interest implements Serializable {
     @JsonIgnore
     private List<Place> places;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "answer_interest",
-            joinColumns = @JoinColumn(name = "interestId" ,referencedColumnName = "interestID"),
-            inverseJoinColumns = @JoinColumn(name = "answerId" , referencedColumnName = "answerID")
-    )
-    @JsonIgnore
-    private List<Answer> answers;
+//    @ManyToMany(cascade = CascadeType.PERSIST)
+//    @JoinTable(
+//            name = "answer_interest",
+//            joinColumns = @JoinColumn(name = "interestId" ,referencedColumnName = "interestID"),
+//            inverseJoinColumns = @JoinColumn(name = "answerId" , referencedColumnName = "answerID")
+//    )
+//    @JsonIgnore
+//    private List<Answer> answers;
 
+    @OneToMany(mappedBy = "interest", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Answer> answers;
 
     public Interest() {
 

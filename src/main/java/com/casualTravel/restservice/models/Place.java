@@ -11,8 +11,10 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long placeID;
     private Long googleID;
+    private String placeName;
     private String positionX;
-    private String getPositionY;
+    private String positionY;
+    private int visitTime;
     private Float visitCost;
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
@@ -30,11 +32,11 @@ public class Place {
 
     }
 
-    public Place(Long placeID, Long googleID, String positionX, String getPositionY, List<Interest> interests) {
+    public Place(Long placeID, Long googleID, String positionX, String positionY, List<Interest> interests) {
         this.placeID = placeID;
         this.googleID = googleID;
         this.positionX = positionX;
-        this.getPositionY = getPositionY;
+        this.positionY = positionY;
         this.interests = interests;
     }
 
@@ -63,11 +65,11 @@ public class Place {
     }
 
     public String getGetPositionY() {
-        return getPositionY;
+        return positionY;
     }
 
     public void setGetPositionY(String getPositionY) {
-        this.getPositionY = getPositionY;
+        this.positionY = getPositionY;
     }
 
     public List<Interest> getInterests() {
@@ -78,5 +80,35 @@ public class Place {
         this.interests = interests;
     }
 
+    public String getPlaceName() {
+        return placeName;
+    }
 
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
+    }
+
+    public int getVisitTime() {
+        return visitTime;
+    }
+
+    public void setVisitTime(int visitTime) {
+        this.visitTime = visitTime;
+    }
+
+    public Float getVisitCost() {
+        return visitCost;
+    }
+
+    public void setVisitCost(Float visitCost) {
+        this.visitCost = visitCost;
+    }
+
+    public List<UserPlace> getUserPlaces() {
+        return userPlaces;
+    }
+
+    public void setUserPlaces(List<UserPlace> userPlaces) {
+        this.userPlaces = userPlaces;
+    }
 }

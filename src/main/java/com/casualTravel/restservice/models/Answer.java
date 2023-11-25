@@ -22,13 +22,19 @@ public class Answer implements Serializable {
 //    @Column(name = "option")
 //    private List<String> answerOptions;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "answer_interest",
-            joinColumns = @JoinColumn(name = "answerId", referencedColumnName = "answerID"),
-            inverseJoinColumns = @JoinColumn(name = "interestId", referencedColumnName = "interestID")
-    )
-    private List<Interest> interests;
+//    @ManyToMany(cascade = CascadeType.PERSIST)
+//    @JoinTable(
+//            name = "answer_interest",
+//            joinColumns = @JoinColumn(name = "answerId", referencedColumnName = "answerID"),
+//            inverseJoinColumns = @JoinColumn(name = "interestId", referencedColumnName = "interestID")
+//    )
+//    private List<Interest> interests;
+
+    @ManyToOne
+    @JoinColumn(name = "interstID", nullable = false)
+    private Interest interest;
+
+
 
     public Answer() {
     }
@@ -57,11 +63,4 @@ public class Answer implements Serializable {
         this.question = question;
     }
 
-    public List<Interest> getInterests() {
-        return interests;
-    }
-
-    public void setInterests(List<Interest> interests) {
-        this.interests = interests;
-    }
 }
