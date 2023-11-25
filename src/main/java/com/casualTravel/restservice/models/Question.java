@@ -1,10 +1,7 @@
 package com.casualTravel.restservice.models;
 import jakarta.persistence.*;
 import java.io.Serializable;
-
-
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table
@@ -12,26 +9,21 @@ public class Question implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionID;
+
     private String text;
 
-    @Override
-    public String toString() {
-        return "Question{" +
-                "questionID=" + questionID +
-                ", text='" + text + '\'' +
-                ", answerOptions=" + answerOptions +
-                ", survey=" + survey +
-                '}';
-    }
-
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "answerOption", joinColumns = @JoinColumn(name = "questionID"))
-    @MapKeyColumn(name = "answerText")
-    @Column(name = "interestId")
-    private Map<String, Integer> answerOptions;
+//    @ElementCollection(fetch = FetchType.LAZY)
+//    @CollectionTable(name = "answerOption", joinColumns = @JoinColumn(name = "questionID"))
+//    @MapKeyColumn(name = "answerText")
+//    @Column(name = "interestId")
+//    private Map<String, Integer> answerOptions;
 
     @ManyToOne
     private Survey survey;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Answer> answerOptions;
+
     public Question() {
     }
 
@@ -41,12 +33,6 @@ public class Question implements Serializable{
 
     public void setSurvey(Survey survey) {
         this.survey = survey;
-    }
-
-    public Question(Long questionID, String text, Map<String, Integer> answerOptions) {
-        this.questionID = questionID;
-        this.text = text;
-        this.answerOptions = answerOptions;
     }
 
     public Long getQuestionID() {
@@ -65,11 +51,11 @@ public class Question implements Serializable{
         this.text = text;
     }
 
-    public Map<String, Integer> getAnswerOptions() {
+    public List<Answer> getAnswerOptions() {
         return answerOptions;
     }
 
-    public void setAnswerOptions(Map<String, Integer> answerOptions) {
+    public void setAnswerOptions(List<Answer> answerOptions) {
         this.answerOptions = answerOptions;
     }
 }
