@@ -24,4 +24,53 @@ public class Achievement implements Serializable {
     )
     @JsonIgnore
     private List<User> users;
+
+    public Achievement(){
+    }
+
+    public Achievement(String name, String level, String achievementPhotoUrl) {
+        this.name = name;
+        this.level = level;
+        this.achievementPhotoUrl = achievementPhotoUrl;
+    }
+
+    public Long getAchievementId() {
+        return achievementId;
+    }
+
+    public void setAchievementId(Long achievementId) {
+        this.achievementId = achievementId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getAchievementPhotoUrl() {
+        return achievementPhotoUrl;
+    }
+
+    public void setAchievementPhotoUrl(String achievementPhotoUrl) {
+        this.achievementPhotoUrl = achievementPhotoUrl;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }
