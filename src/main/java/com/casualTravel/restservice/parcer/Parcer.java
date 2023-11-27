@@ -26,7 +26,7 @@ public class Parcer {
   }
   public void parce() {
     try {
-      FileInputStream file = new FileInputStream(new File("C:\\Users\\bogda\\Music\\CasualTravel\\src\\main\\resources\\base.xlsx"));
+      FileInputStream file = new FileInputStream(new File("src/main/resources/base.xlsx"));
 
       Workbook workbook = WorkbookFactory.create(file);
       List<Place> placeList = new ArrayList<>();

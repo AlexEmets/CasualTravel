@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,10 +57,30 @@ public class PlaceService {
         userPlaceOptional.ifPresent(userPlaceRepository::delete);
     }
 
+//    public List<InterestDTO> getInterestsDTO(Map<Interest, Double> interests) {
+//        return interests.entrySet().stream()
+//                .map(entry -> mapToInterestDTO(entry.getKey()))
+//                .collect(Collectors.toList());
+//    }
+//
+//    private InterestDTO mapToInterestDTO(Interest interest) {
+//        return new InterestDTO(
+//                interest.getInterestID(),
+//                interest.getName(),
+//                interest.getImageURL()
+//        );
+//    }
+
     public List<InterestDTO> getInterestsDTO(Map<Interest, Double> interests) {
-        return interests.entrySet().stream()
-                .map(entry -> mapToInterestDTO(entry.getKey()))
-                .collect(Collectors.toList());
+        List<InterestDTO> interestDTOList = new ArrayList<>();
+
+        for (Map.Entry<Interest, Double> entry : interests.entrySet()) {
+            Interest interest = entry.getKey();
+            InterestDTO interestDTO = mapToInterestDTO(interest);
+            interestDTO.setWage(entry.getValue());
+            interestDTOList.add(interestDTO);
+        }
+        return interestDTOList;
     }
 
     private InterestDTO mapToInterestDTO(Interest interest) {
@@ -69,6 +90,5 @@ public class PlaceService {
                 interest.getImageURL()
         );
     }
-
 }
 
