@@ -26,7 +26,7 @@ public class QuestionService {
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
     }
 
-    public List<Question> listQuestions() {
+    public List<Question> getAllQuestions() {
         return (List<Question>) questionRepository.findAll();
     }
 

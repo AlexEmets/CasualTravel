@@ -1,10 +1,8 @@
 package com.casualTravel.restservice.controller;
 
-import com.casualTravel.restservice.dto.InterestDTO;
-import com.casualTravel.restservice.dto.LocationDTO;
-import com.casualTravel.restservice.dto.PlaceOut;
+import com.casualTravel.restservice.dto.*;
 import com.casualTravel.restservice.models.*;
-import com.casualTravel.restservice.service.PlaceService;
+import com.casualTravel.restservice.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
