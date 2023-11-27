@@ -33,7 +33,7 @@ public class PlaceController {
     }
 
     private PlaceOut mapToPlaceResponseDTO(Place place) {
-        LocationDTO location = new LocationDTO(place.getPositionX(), place.getGetPositionY());
+        LocationDTO location = new LocationDTO(place.getPositionX(), place.getPositionY());
         List<InterestDTO> interestDTOs = placeService.getInterestsDTO(place.getInterests());
 
         return new PlaceOut(
