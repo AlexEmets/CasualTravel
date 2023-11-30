@@ -5,15 +5,13 @@ import com.casualTravel.restservice.dto.InterestDTO;
 import com.casualTravel.restservice.models.*;
 import com.casualTravel.restservice.repository.PlaceRepository;
 import com.casualTravel.restservice.repository.UserPlaceRepository;
+import com.casualTravel.restservice.utils.Point;
+import com.casualTravel.restservice.utils.RouteGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -21,6 +19,7 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
     private final UserPlaceRepository userPlaceRepository;
+    private final InterestService interestService;
 
     public List<Place> getAllPlaces() {
         return placeRepository.findAll();
@@ -94,15 +93,42 @@ public class PlaceService {
 
     public List<Place> autoGenerateRoute(AutoRouteAnswerIn autoRouteAnswerIn, User user)
     {
-//
-//        var placesFromBD = getAllPlaces();
-//        for(Place place : placesFromBD)
-//        {
-//            Point routePlace = new Point(place.getPlaceName(), Double.parseDouble(place.getPositionX()), Double.parseDouble(place.getPositionY()),
-//                    place.getInterests().get());
-//        }
-//        RouteGenerator routeGenerator();
-        return new ArrayList<>();
+        var placesFromBD = getAllPlaces();
+        Interest interest1 = interestService.getInterestById(1L).orElse(null);
+        Interest interest2 = interestService.getInterestById(2L).orElse(null);
+        Interest interest3 = interestService.getInterestById(3L).orElse(null);
+        Interest interest4 = interestService.getInterestById(4L).orElse(null);
+
+        List<Point> points = new ArrayList<>();
+        for(Place place : placesFromBD)
+        {
+            Point routePlace = new Point(place.getPlaceName(), Double.parseDouble(place.getPositionX()), Double.parseDouble(place.getPositionY()),
+                    place.getInterests().get(interest1), place.getInterests().get(interest2), place.getInterests().get(interest3), place.getInterests().get(interest4), place.getMustVisit(), place.getOutdoorAction(), place.getPreferentialCost());
+            points.add(routePlace);
+        }
+        RouteGenerator routeGenerator = new RouteGenerator(
+                points,
+                0.5,
+                0.5,
+                0.5,
+                0.5,
+                autoRouteAnswerIn
+        );
+        var route = routeGenerator.generateRoute();
+
+        RouteGenerator.printRoute(route);
+
+        List<Place> placesList = new LinkedList<>();
+        for(Point point : route)
+        {
+            Place place = new Place();
+            place.setPlaceName(point.getName());
+
+            place.setPositionX(Double.toString(point.getLongitude()));
+            place.setPositionY(Double.toString(point.getLatitude()));
+            placesList.add(place);
+        }
+        return placesList;
     }
 }
 

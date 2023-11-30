@@ -1,5 +1,7 @@
 package com.casualTravel.restservice.utils;
 
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,6 +25,20 @@ public class Point {
     private double historyCoef;
     private double artCoef;
 
+
+    private boolean isMustVisit;
+
+    private boolean isOutdoor;
+    @Getter
+    private Float priceLevel;
+
+    public boolean isMustVisit() {
+        return isMustVisit;
+    }
+
+    public boolean isOutdoor() {
+        return isOutdoor;
+    }
 
     public double getNatureCoef() {
         return natureCoef;
@@ -61,7 +77,7 @@ public class Point {
     }
 
 
-    public Point(String name, double longitude, double latitude, double natureCoef, double historyCoef, double funCoef, double artCoef) {
+    public Point(String name, double longitude, double latitude, double natureCoef, double historyCoef, double funCoef, double artCoef, boolean isMustVisit, boolean isOutdoor, Float priceLevel) {
         this.name = name;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -69,6 +85,9 @@ public class Point {
         this.funCoef = funCoef;
         this.historyCoef = historyCoef;
         this.artCoef = artCoef;
+        this.isMustVisit = isMustVisit;
+        this.isOutdoor = isOutdoor;
+        this.priceLevel = priceLevel;
     }
 
     public void setDistance(Double distance) {
