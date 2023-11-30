@@ -33,13 +33,23 @@ public class Interest implements Serializable {
     @JsonIgnore
     private List<Place> places;
 
+//    @ManyToMany(cascade = CascadeType.PERSIST)
+//    @JoinTable(
+//            name = "answer_interest",
+//            joinColumns = @JoinColumn(name = "interestId" ,referencedColumnName = "interestID"),
+//            inverseJoinColumns = @JoinColumn(name = "answerId" , referencedColumnName = "answerID")
+//    )
+//    @JsonIgnore
+//    private List<Answer> answers;
+
+    @OneToMany(mappedBy = "interest", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Answer> answers;
 
     public Interest() {
 
     }
 
-    public Interest(Long interestID, String name, String description) {
-        this.interestID = interestID;
+    public Interest(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -67,9 +77,11 @@ public class Interest implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public List<User> getUsers() {
         return users;
     }
+
     public String getImageURL() {
         return imageURL;
     }

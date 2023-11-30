@@ -3,8 +3,11 @@ package com.casualTravel.restservice.service;
 import com.casualTravel.restservice.dto.AuthenticationRequest;
 import com.casualTravel.restservice.dto.AuthenticationResponse;
 import com.casualTravel.restservice.dto.RegisterRequest;
+import com.casualTravel.restservice.models.Achievement;
 import com.casualTravel.restservice.models.Interest;
 import com.casualTravel.restservice.models.User;
+import com.casualTravel.restservice.repository.AchievementRepository;
+import com.casualTravel.restservice.repository.UserPlaceRepository;
 import com.casualTravel.restservice.repository.UserRepository;
 import com.casualTravel.restservice.repository.InterestRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.casualTravel.restservice.models.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -23,16 +28,12 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final InterestRepository interestRepository;
-//  private final TokenRepository tokenRepository;
+    private final AchievementRepository achievementRepository;
+    private final UserPlaceRepository userPlaceRepository;
+
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
-//    @Autowired
-//    public UserService(UserRepository userRepository, InterestRepository interestRepository) {
-//        this.userRepository = userRepository;
-//        this.interestRepository = interestRepository;
-//    }
 
     public User createUser(User user) {
         return userRepository.save(user);
@@ -73,6 +74,45 @@ public class UserService implements UserDetailsService {
             userRepository.save(user);
         }
     }
+
+    public void addAchievementToUser(Long userId, Long achievementId) {
+        User user = userRepository.findById(userId).orElse(null);
+        Achievement achievement = achievementRepository.findById(achievementId).orElse(null);
+
+        if (user != null && achievement != null) {
+            user.addAchievement(achievement);
+            userRepository.save(user);
+        }
+    }
+
+    public void removeAchievementFromUser(Long userId, Long achievementId) {
+        User user = userRepository.findById(userId).orElse(null);
+        Achievement achievement = achievementRepository.findById(achievementId).orElse(null);
+
+        if (user != null && achievement != null) {
+            user.removeAchievement(achievement);
+            userRepository.save(user);
+        }
+    }
+
+    public void addPlaceToUser(Place place, User user, LocalDateTime timeSpent) {
+        // Створюємо новий об'єкт UserPlace з вказаним користувачем, місцем та часом
+        UserPlace userPlace = new UserPlace(user, place, timeSpent);
+
+        // Зберігаємо зв'язок у репозиторії
+        userPlaceRepository.save(userPlace);
+    }
+
+    public void removePlaceFromUser(Place place, User user) {
+        // Знаходимо UserPlace за вказаним користувачем та місцем
+        Optional<UserPlace> userPlaceOptional = userPlaceRepository.findByUserAndPlace(user, place);
+
+        // Видаляємо UserPlace, якщо знайдено
+        userPlaceOptional.ifPresent(userPlaceRepository::delete);
+    }
+
+
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
