@@ -1,5 +1,6 @@
 package com.casualTravel.restservice.service;
 
+import com.casualTravel.restservice.dto.AutoRouteAnswerIn;
 import com.casualTravel.restservice.dto.InterestDTO;
 import com.casualTravel.restservice.models.*;
 import com.casualTravel.restservice.repository.PlaceRepository;
@@ -89,6 +90,19 @@ public class PlaceService {
                 interest.getName(),
                 interest.getImageURL()
         );
+    }
+
+    public List<Place> autoGenerateRoute(AutoRouteAnswerIn autoRouteAnswerIn, User user)
+    {
+//
+//        var placesFromBD = getAllPlaces();
+//        for(Place place : placesFromBD)
+//        {
+//            Point routePlace = new Point(place.getPlaceName(), Double.parseDouble(place.getPositionX()), Double.parseDouble(place.getPositionY()),
+//                    place.getInterests().get());
+//        }
+//        RouteGenerator routeGenerator();
+        return new ArrayList<>();
     }
 }
 

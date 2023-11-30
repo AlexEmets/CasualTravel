@@ -49,7 +49,7 @@ public class Place {
 
     @Override
     public String toString() {
-        return "Place{" +
+        return "Point{" +
             "placeID=" + placeID +
             ", googleID=" + googleID +
             ", placeName='" + placeName + '\'' +

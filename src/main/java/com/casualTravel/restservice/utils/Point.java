@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Place {
+public class Point {
 
     private final String name;
 
-    private List<Place> shortestPath = new LinkedList<>();
+    private List<Point> shortestPath = new LinkedList<>();
 
     private Double distance = 1e18;
 
@@ -54,14 +54,14 @@ public class Place {
     public void setArtCoef(double artCoef) {
         this.artCoef = artCoef;
     }
-    Map<Place, Double> adjacentNodes = new HashMap<>();
+    Map<Point, Double> adjacentNodes = new HashMap<>();
 
-    public void addDestination(Place destination, double distance) {
+    public void addDestination(Point destination, double distance) {
         adjacentNodes.put(destination, distance);
     }
 
 
-    public Place(String name, double longitude, double latitude, double natureCoef, double historyCoef, double funCoef, double artCoef) {
+    public Point(String name, double longitude, double latitude, double natureCoef, double historyCoef, double funCoef, double artCoef) {
         this.name = name;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -79,19 +79,19 @@ public class Place {
         return distance;
     }
 
-    public void setShortestPath(List<Place> shortestPath) {
+    public void setShortestPath(List<Point> shortestPath) {
         this.shortestPath = shortestPath;
     }
 
-    public List<Place> getShortestPath() {
+    public List<Point> getShortestPath() {
         return shortestPath;
     }
 
-    public Map<Place, Double> getAdjacentNodes() {
+    public Map<Point, Double> getAdjacentNodes() {
         return adjacentNodes;
     }
 
-    public void setAdjacentNodes(Map<Place, Double> adjacentNodes) {
+    public void setAdjacentNodes(Map<Point, Double> adjacentNodes) {
         this.adjacentNodes = adjacentNodes;
     }
 
