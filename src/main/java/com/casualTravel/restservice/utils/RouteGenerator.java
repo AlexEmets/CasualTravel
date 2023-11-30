@@ -10,12 +10,14 @@ public class RouteGenerator {
     private double userArtCoef;
 
 
-    public RouteGenerator(Set<Place> places, double userNatureCoef, double userFunCoef, double userHistoryCoef, double userArtCoef) {
+    public RouteGenerator(List<Place> places, double userNatureCoef, double userFunCoef, double userHistoryCoef, double userArtCoef) {
+        this.allPlaces = new LinkedList<>();
         this.userNatureCoef = userNatureCoef;
         this.userFunCoef = userFunCoef;
         this.userHistoryCoef = userHistoryCoef;
         this.userArtCoef = userArtCoef;
         fillGraphWithPlaces(places);
+
     }
 
     public double getNatureCoef() {
@@ -49,13 +51,13 @@ public class RouteGenerator {
     public void setArtCoef(double artCoef) {
         this.userArtCoef = artCoef;
     }
-    private final Set<Place> allPlaces = new HashSet<>();
+    private List<Place> allPlaces;
 
     public void addPlace(Place nodeA) {
         allPlaces.add(nodeA);
     }
 
-    public static RouteGenerator calculateShortestPathFromSource(RouteGenerator graph, Place source) {
+    public static RouteGenerator calculateShortestPathFromSource(RouteGenerator graph, Place source, Integer amountOfPlaces) {
         source.setDistance(0.0);
 
         Set<Place> settledNodes = new HashSet<>();
@@ -114,7 +116,7 @@ public class RouteGenerator {
     {
         return (int) (1000*(userArtCoef * place.getArtCoef() + userNatureCoef * place.getNatureCoef() + userFunCoef * place.getFunCoef() + userHistoryCoef * place.getHistoryCoef()));
     }
-    public void fillGraphWithPlaces(Set<Place> places) {
+    public void fillGraphWithPlaces(List<Place> places) {
         for (Place p : places) {
             p.setInterestValue(calculateInterestValue(p));
         }
@@ -123,6 +125,7 @@ public class RouteGenerator {
             for (Place place2 : places) {
                 if (!place1.equals(place2)) {
                     double distance = calculateEdgeWeight(place1, place2);
+                    System.out.println(place1.getName() + " --- " + place2.getName() + " " + distance);
                     place1.addDestination(place2, distance);
                 }
             }
@@ -160,12 +163,12 @@ public class RouteGenerator {
         return Math.sqrt(distance);
     }
 
-    public Set<Place> getNodes() {
+    public List<Place> getNodes() {
         return allPlaces;
     }
 
-    public List<Place> generateRoute(Place placeStart, Place placeFinish) {
-        var graph = RouteGenerator.calculateShortestPathFromSource(this, placeStart);
+    public List<Place> generateRoute(Place placeStart, Place placeFinish, Integer amountOfPlaces) {
+        var graph = RouteGenerator.calculateShortestPathFromSource(this, placeStart, amountOfPlaces);
 
         LinkedList<Place> route = new LinkedList<>(placeFinish.getShortestPath());
         route.add(placeFinish); // Додаємо placeFinish в кінець списку
@@ -180,5 +183,89 @@ public class RouteGenerator {
                 System.out.print(" ---> ");
             }
         }
+    }
+
+    // ----------------------------------------------------------------------
+
+    public RouteGenerator(List<Place> allPlaces) {
+        this.allPlaces = allPlaces;
+    }
+    public List<Place> findShortestPathBruteforce(int k) {
+        if (allPlaces.isEmpty() || k < 2) {
+            return new ArrayList<>();
+        }
+
+        // Перша вершина - це завжди перший елемент списку
+        Place firstPlace = allPlaces.get(0);
+
+        // Створення списку без першої вершини
+        List<Place> remainingPlaces = new ArrayList<>(allPlaces);
+        remainingPlaces.remove(0);
+
+        // Генерація комбінацій k-1 вершин з remainingPlaces
+        Set<Set<Place>> allCombinations = generateCombinations(new LinkedList<>(remainingPlaces), k - 1);
+
+        List<Place> shortestPath = new ArrayList<>();
+        double shortestDistance = Double.MAX_VALUE;
+
+        for (Set<Place> combination : allCombinations) {
+            List<Place> currentPath = new ArrayList<>();
+            currentPath.add(firstPlace);
+            currentPath.addAll(combination);
+
+            double currentDistance = calculatePathDistance(currentPath);
+
+            if (currentDistance < shortestDistance) {
+                shortestDistance = currentDistance;
+                shortestPath = currentPath;
+            }
+        }
+
+        return shortestPath;
+    }
+    public static Set<Set<Place>> generateCombinations(List<Place> places, int k) {
+        Set<Set<Place>> allCombinations = new HashSet<>();
+        generateCombinationsRecursive(places, k, new LinkedList<>(), allCombinations, new ArrayList<>(places));
+        return allCombinations;
+    }
+
+    private static void generateCombinationsRecursive(List<Place> places, int k, List<Place> current, Set<Set<Place>> allCombinations, List<Place> remaining) {
+        if (current.size() == k) {
+            allCombinations.add(new HashSet<>(current));
+            return;
+        }
+
+        for (int i = 0; i < remaining.size(); i++) {
+            Place next = remaining.get(i);
+            current.add(next);
+
+            generateCombinationsRecursive(places, k, current, allCombinations, remaining.subList(i + 1, remaining.size()));
+
+            current.remove(next);
+        }
+    }
+
+    public double calculatePathDistance(List<Place> path) {
+        if (path.size() < 2) {
+            return 0.0; // Немає відстані для шляху з менше ніж двома місцями
+        }
+
+        double totalDistance = 0.0;
+
+        for (int i = 0; i < path.size() - 1; i++) {
+            Place currentPlace = path.get(i);
+            Place nextPlace = path.get(i + 1);
+
+            Double distance = currentPlace.getAdjacentNodes().get(nextPlace);
+            if (distance != null) {
+                totalDistance += distance;
+            } else {
+                // Якщо не існує прямого з'єднання між currentPlace та nextPlace,
+                // можна або встановити дуже велике число, або обробити це як помилку
+                totalDistance += Double.MAX_VALUE;
+            }
+        }
+
+        return totalDistance;
     }
 }
