@@ -10,12 +10,14 @@ public class RouteGenerator {
     private double userArtCoef;
 
 
-    public RouteGenerator(Set<Point> points, double userNatureCoef, double userFunCoef, double userHistoryCoef, double userArtCoef) {
+    public RouteGenerator(List<Point> places, double userNatureCoef, double userFunCoef, double userHistoryCoef, double userArtCoef) {
+        this.allPlaces = new LinkedList<>();
         this.userNatureCoef = userNatureCoef;
         this.userFunCoef = userFunCoef;
         this.userHistoryCoef = userHistoryCoef;
         this.userArtCoef = userArtCoef;
-        fillGraphWithPlaces(points);
+        fillGraphWithPlaces(places);
+
     }
 
     public double getNatureCoef() {
@@ -49,13 +51,13 @@ public class RouteGenerator {
     public void setArtCoef(double artCoef) {
         this.userArtCoef = artCoef;
     }
-    private final Set<Point> allPoints = new HashSet<>();
+    private List<Point> allPlaces;
 
     public void addPlace(Point nodeA) {
-        allPoints.add(nodeA);
+        allPlaces.add(nodeA);
     }
 
-    public static RouteGenerator calculateShortestPathFromSource(RouteGenerator graph, Point source) {
+    public static RouteGenerator calculateShortestPathFromSource(RouteGenerator graph, Point source, Integer amountOfPlaces) {
         source.setDistance(0.0);
 
         Set<Point> settledNodes = new HashSet<>();
@@ -110,29 +112,30 @@ public class RouteGenerator {
     }
 
     // TODO
-    private int calculateInterestValue(Point point)
+    private int calculateInterestValue(Point place)
     {
-        return (int) (1000*(userArtCoef * point.getArtCoef() + userNatureCoef * point.getNatureCoef() + userFunCoef * point.getFunCoef() + userHistoryCoef * point.getHistoryCoef()));
+        return (int) (1000*(userArtCoef * place.getArtCoef() + userNatureCoef * place.getNatureCoef() + userFunCoef * place.getFunCoef() + userHistoryCoef * place.getHistoryCoef()));
     }
-    public void fillGraphWithPlaces(Set<Point> points) {
-        for (Point p : points) {
+    public void fillGraphWithPlaces(List<Point> places) {
+        for (Point p : places) {
             p.setInterestValue(calculateInterestValue(p));
         }
 
-        for (Point point1 : points) {
-            for (Point point2 : points) {
-                if (!point1.equals(point2)) {
-                    double distance = calculateEdgeWeight(point1, point2);
-                    point1.addDestination(point2, distance);
+        for (Point place1 : places) {
+            for (Point place2 : places) {
+                if (!place1.equals(place2)) {
+                    double distance = calculateEdgeWeight(place1, place2);
+                    System.out.println(place1.getName() + " --- " + place2.getName() + " " + distance);
+                    place1.addDestination(place2, distance);
                 }
             }
-            addPlace(point1); // add every place from function parameter to our graph
+            addPlace(place1); // add every place from function parameter to our graph
         }
     }
 
-    private double calculateEdgeWeight(Point point1, Point point2) {
-        int destinationPlaceInterestValue = point2.getInterestValue();
-        double distanceBetweenPlaces = findDistance(point1, point2);
+    private double calculateEdgeWeight(Point place1, Point place2) {
+        int destinationPlaceInterestValue = place2.getInterestValue();
+        double distanceBetweenPlaces = findDistance(place1, place2);
 
         return distanceBetweenPlaces / destinationPlaceInterestValue;
     }
@@ -141,14 +144,14 @@ public class RouteGenerator {
      * Calculate distance between two points in latitude and longitude
      * @returns Distance in Meters
      */
-    public static double findDistance(Point point1, Point point2) {
+    public static double findDistance(Point place1, Point place2) {
 
         final int R = 6371; // Radius of the earth
 
-        double latDistance = Math.toRadians(point2.getLatitude() - point1.getLatitude());
-        double lonDistance = Math.toRadians(point2.getLongitude() - point1.getLongitude());
+        double latDistance = Math.toRadians(place2.getLatitude() - place1.getLatitude());
+        double lonDistance = Math.toRadians(place2.getLongitude() - place1.getLongitude());
         double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(point1.getLatitude())) * Math.cos(Math.toRadians(point2.getLatitude()))
+                + Math.cos(Math.toRadians(place1.getLatitude())) * Math.cos(Math.toRadians(place2.getLatitude()))
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = R * c * 1000; // convert to meters
@@ -160,25 +163,109 @@ public class RouteGenerator {
         return Math.sqrt(distance);
     }
 
-    public Set<Point> getNodes() {
-        return allPoints;
+    public List<Point> getNodes() {
+        return allPlaces;
     }
 
-    public List<Point> generateRoute(Point pointStart, Point pointFinish) {
-        var graph = RouteGenerator.calculateShortestPathFromSource(this, pointStart);
+    public List<Point> generateRoute(Point placeStart, Point placeFinish, Integer amountOfPlaces) {
+        var graph = RouteGenerator.calculateShortestPathFromSource(this, placeStart, amountOfPlaces);
 
-        LinkedList<Point> route = new LinkedList<>(pointFinish.getShortestPath());
-        route.add(pointFinish); // Додаємо pointFinish в кінець списку
+        LinkedList<Point> route = new LinkedList<>(placeFinish.getShortestPath());
+        route.add(placeFinish); // Додаємо placeFinish в кінець списку
 
         return route;
     }
 
-    public static void printRoute(List<Point> points) {
-        for (int i = 0; i < points.size(); i++) {
-            System.out.print(points.get(i).getName());
-            if (i < points.size() - 1) {
+    public static void printRoute(List<Point> places) {
+        for (int i = 0; i < places.size(); i++) {
+            System.out.print(places.get(i).getName());
+            if (i < places.size() - 1) {
                 System.out.print(" ---> ");
             }
         }
+    }
+
+    // ----------------------------------------------------------------------
+
+    public RouteGenerator(List<Point> allPlaces) {
+        this.allPlaces = allPlaces;
+    }
+    public List<Point> findShortestPathBruteforce(int k) {
+        if (allPlaces.isEmpty() || k < 2) {
+            return new ArrayList<>();
+        }
+
+        // Перша вершина - це завжди перший елемент списку
+        Point firstPlace = allPlaces.get(0);
+
+        // Створення списку без першої вершини
+        List<Point> remainingPlaces = new ArrayList<>(allPlaces);
+        remainingPlaces.remove(0);
+
+        // Генерація комбінацій k-1 вершин з remainingPlaces
+        Set<Set<Point>> allCombinations = generateCombinations(new LinkedList<>(remainingPlaces), k - 1);
+
+        List<Point> shortestPath = new ArrayList<>();
+        double shortestDistance = Double.MAX_VALUE;
+
+        for (Set<Point> combination : allCombinations) {
+            List<Point> currentPath = new ArrayList<>();
+            currentPath.add(firstPlace);
+            currentPath.addAll(combination);
+
+            double currentDistance = calculatePathDistance(currentPath);
+
+            if (currentDistance < shortestDistance) {
+                shortestDistance = currentDistance;
+                shortestPath = currentPath;
+            }
+        }
+
+        return shortestPath;
+    }
+    public static Set<Set<Point>> generateCombinations(List<Point> places, int k) {
+        Set<Set<Point>> allCombinations = new HashSet<>();
+        generateCombinationsRecursive(places, k, new LinkedList<>(), allCombinations, new ArrayList<>(places));
+        return allCombinations;
+    }
+
+    private static void generateCombinationsRecursive(List<Point> places, int k, List<Point> current, Set<Set<Point>> allCombinations, List<Point> remaining) {
+        if (current.size() == k) {
+            allCombinations.add(new HashSet<>(current));
+            return;
+        }
+
+        for (int i = 0; i < remaining.size(); i++) {
+            Point next = remaining.get(i);
+            current.add(next);
+
+            generateCombinationsRecursive(places, k, current, allCombinations, remaining.subList(i + 1, remaining.size()));
+
+            current.remove(next);
+        }
+    }
+
+    public double calculatePathDistance(List<Point> path) {
+        if (path.size() < 2) {
+            return 0.0; // Немає відстані для шляху з менше ніж двома місцями
+        }
+
+        double totalDistance = 0.0;
+
+        for (int i = 0; i < path.size() - 1; i++) {
+            Point currentPlace = path.get(i);
+            Point nextPlace = path.get(i + 1);
+
+            Double distance = currentPlace.getAdjacentNodes().get(nextPlace);
+            if (distance != null) {
+                totalDistance += distance;
+            } else {
+                // Якщо не існує прямого з'єднання між currentPlace та nextPlace,
+                // можна або встановити дуже велике число, або обробити це як помилку
+                totalDistance += Double.MAX_VALUE;
+            }
+        }
+
+        return totalDistance;
     }
 }
