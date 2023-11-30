@@ -1,4 +1,5 @@
 package com.casualTravel.restservice.models;
+
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -16,17 +17,26 @@ public class Answer implements Serializable {
     @JoinColumn(name = "questionID", nullable = false)
     private Question question;
 
-    @ElementCollection
-    @CollectionTable(name = "answer_options", joinColumns = @JoinColumn(name = "answerID"))
-    @Column(name = "option")
-    private List<String> answerOptions;
+//    @ElementCollection
+//    @CollectionTable(name = "answer_options", joinColumns = @JoinColumn(name = "answerID"))
+//    @Column(name = "option")
+//    private List<String> answerOptions;
+
+//    @ManyToMany(cascade = CascadeType.PERSIST)
+//    @JoinTable(
+//            name = "answer_interest",
+//            joinColumns = @JoinColumn(name = "answerId", referencedColumnName = "answerID"),
+//            inverseJoinColumns = @JoinColumn(name = "interestId", referencedColumnName = "interestID")
+//    )
+//    private List<Interest> interests;
+
+    @ManyToOne
+    @JoinColumn(name = "interstID", nullable = false)
+    private Interest interest;
+
+
 
     public Answer() {
-    }
-
-    public Answer(Long answerID, List<String> answerOptions) {
-        this.answerID = answerID;
-        this.answerOptions = answerOptions;
     }
 
     public Long getAnswerID() {
@@ -37,19 +47,20 @@ public class Answer implements Serializable {
         this.answerID = answerID;
     }
 
-    public List<String> getAnswerOptions() {
-        return answerOptions;
+    public String getAnswerText() {
+        return answerText;
     }
 
-    public void setAnswerOptions(List<String> answerOptions) {
-        this.answerOptions = answerOptions;
+    public void setAnswerText(String answerText) {
+        this.answerText = answerText;
     }
 
-    @Override
-    public String toString() {
-        return "Answer{" +
-                "answerID=" + answerID +
-                ", answerOptions=" + answerOptions +
-                '}';
+    public Question getQuestion() {
+        return question;
     }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
 }

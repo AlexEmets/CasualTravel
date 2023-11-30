@@ -5,26 +5,35 @@ import java.util.List;
 
 @Entity
 @Table
-public class Question implements Serializable {
+public class Question implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionID;
+
     private String text;
 
+//    @ElementCollection(fetch = FetchType.LAZY)
+//    @CollectionTable(name = "answerOption", joinColumns = @JoinColumn(name = "questionID"))
+//    @MapKeyColumn(name = "answerText")
+//    @Column(name = "interestId")
+//    private Map<String, Integer> answerOptions;
+
     @ManyToOne
+    @JoinColumn(name = "survey_surveyId", referencedColumnName = "surveyID")
     private Survey survey;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Answer> answerOptions;
 
-    // Конструктори, геттери, сеттери і toString метод
     public Question() {
     }
 
-    public Question(Long questionID, String text, List<Answer> answerOptions) {
-        this.questionID = questionID;
-        this.text = text;
-        this.answerOptions = answerOptions;
+    public Survey getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
     }
 
     public Long getQuestionID() {
@@ -49,23 +58,5 @@ public class Question implements Serializable {
 
     public void setAnswerOptions(List<Answer> answerOptions) {
         this.answerOptions = answerOptions;
-    }
-
-    public Survey getSurvey() {
-        return survey;
-    }
-
-    public void setSurvey(Survey survey) {
-        this.survey = survey;
-    }
-
-    @Override
-    public String toString() {
-        return "Question{" +
-                "questionID=" + questionID +
-                ", text='" + text + '\'' +
-                ", answerOptions=" + answerOptions +
-                ", survey=" + survey +
-                '}';
     }
 }
