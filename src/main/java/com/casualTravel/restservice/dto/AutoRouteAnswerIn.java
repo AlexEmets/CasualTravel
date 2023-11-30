@@ -3,7 +3,7 @@ package com.casualTravel.restservice.dto;
 public class AutoRouteAnswerIn {
     private Integer locationsCount;
 
-    private Integer priceLevel;
+    private Float priceLevel;
 
     private Boolean mustVisitWeight;
 
@@ -24,11 +24,11 @@ public class AutoRouteAnswerIn {
         this.locationsCount = locationsCount;
     }
 
-    public Integer getPriceLevel() {
+    public Float getPriceLevel() {
         return priceLevel;
     }
 
-    public void setPriceLevel(Integer priceLevel) {
+    public void setPriceLevel(Float priceLevel) {
         this.priceLevel = priceLevel;
     }
 

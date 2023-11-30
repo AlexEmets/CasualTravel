@@ -1,6 +1,9 @@
 package com.casualTravel.restservice.utils;
 
+import com.casualTravel.restservice.dto.AutoRouteAnswerIn;
+
 import java.util.*;
+
 
 public class RouteGenerator {
 
@@ -9,13 +12,28 @@ public class RouteGenerator {
     private double userHistoryCoef;
     private double userArtCoef;
 
+    private boolean isMustVisitPlacesNeeded;
 
-    public RouteGenerator(List<Point> places, double userNatureCoef, double userFunCoef, double userHistoryCoef, double userArtCoef) {
+    private boolean isOutdoorPlacesNeeded;
+    private int placesAmountNeeded;
+    private Float priceLevelNeeded;
+    public RouteGenerator(List<Point> places, double userNatureCoef, double userFunCoef, double userHistoryCoef, double userArtCoef, AutoRouteAnswerIn surveyAnswers) {
         this.allPlaces = new LinkedList<>();
+
         this.userNatureCoef = userNatureCoef;
         this.userFunCoef = userFunCoef;
         this.userHistoryCoef = userHistoryCoef;
         this.userArtCoef = userArtCoef;
+
+        this.placesAmountNeeded = surveyAnswers.getLocationsCount();
+        this.isMustVisitPlacesNeeded = surveyAnswers.getMustVisitWeight();
+        this.isOutdoorPlacesNeeded = surveyAnswers.getOutdoorAction();
+        this.priceLevelNeeded = surveyAnswers.getPriceLevel();
+
+        Point startPoint = new Point("Стартова точка", Double.parseDouble(surveyAnswers.getStartLocation().getX()),Double.parseDouble(surveyAnswers.getStartLocation().getY()), 0, 0, 0, 0,
+                surveyAnswers.getMustVisitWeight(), surveyAnswers.getOutdoorAction(), surveyAnswers.getPriceLevel());
+        places.add(0, startPoint);
+
         fillGraphWithPlaces(places);
 
     }
@@ -114,6 +132,7 @@ public class RouteGenerator {
     // TODO
     private int calculateInterestValue(Point place)
     {
+        if(place.isOutdoor() && !isOutdoorPlacesNeeded) return (int) INF; // TODO add logic
         return (int) (1000*(userArtCoef * place.getArtCoef() + userNatureCoef * place.getNatureCoef() + userFunCoef * place.getFunCoef() + userHistoryCoef * place.getHistoryCoef()));
     }
     public void fillGraphWithPlaces(List<Point> places) {
@@ -137,7 +156,7 @@ public class RouteGenerator {
         int destinationPlaceInterestValue = place2.getInterestValue();
         double distanceBetweenPlaces = findDistance(place1, place2);
 
-        return distanceBetweenPlaces / destinationPlaceInterestValue;
+        return distanceBetweenPlaces /*/ destinationPlaceInterestValue*/;
     }
 
     /**
@@ -167,14 +186,14 @@ public class RouteGenerator {
         return allPlaces;
     }
 
-    public List<Point> generateRoute(Point placeStart, Point placeFinish, Integer amountOfPlaces) {
-        var graph = RouteGenerator.calculateShortestPathFromSource(this, placeStart, amountOfPlaces);
-
-        LinkedList<Point> route = new LinkedList<>(placeFinish.getShortestPath());
-        route.add(placeFinish); // Додаємо placeFinish в кінець списку
-
-        return route;
-    }
+//    public List<Point> generateRoute(Point placeStart, Point placeFinish, Integer amountOfPlaces) {
+//        var graph = RouteGenerator.calculateShortestPathFromSource(this, placeStart, amountOfPlaces);
+//
+//        LinkedList<Point> route = new LinkedList<>(placeFinish.getShortestPath());
+//        route.add(placeFinish); // Додаємо placeFinish в кінець списку
+//
+//        return route;
+//    }
 
     public static void printRoute(List<Point> places) {
         for (int i = 0; i < places.size(); i++) {
@@ -190,8 +209,8 @@ public class RouteGenerator {
     public RouteGenerator(List<Point> allPlaces) {
         this.allPlaces = allPlaces;
     }
-    public List<Point> findShortestPathBruteforce(int k) {
-        if (allPlaces.isEmpty() || k < 2) {
+    public List<Point> generateRoute() {
+        if (allPlaces.isEmpty() || placesAmountNeeded < 2) {
             return new ArrayList<>();
         }
 
@@ -203,7 +222,7 @@ public class RouteGenerator {
         remainingPlaces.remove(0);
 
         // Генерація комбінацій k-1 вершин з remainingPlaces
-        Set<Set<Point>> allCombinations = generateCombinations(new LinkedList<>(remainingPlaces), k - 1);
+        Set<Set<Point>> allCombinations = generateCombinations(new LinkedList<>(remainingPlaces), placesAmountNeeded - 1);
 
         List<Point> shortestPath = new ArrayList<>();
         double shortestDistance = Double.MAX_VALUE;
@@ -268,4 +287,6 @@ public class RouteGenerator {
 
         return totalDistance;
     }
+
+    private double INF = 1e9;
 }
