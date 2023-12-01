@@ -130,7 +130,7 @@ public class RouteGenerator {
     }
 
     // TODO
-    private int calculateInterestValue(Point place)
+    public int calculateInterestValue(Point place)
     {
         if(place.isOutdoor() && !isOutdoorPlacesNeeded) return (int) INF; // TODO add logic
         return (int) (1000*(userArtCoef * place.getArtCoef() + userNatureCoef * place.getNatureCoef() + userFunCoef * place.getFunCoef() + userHistoryCoef * place.getHistoryCoef()));
@@ -210,7 +210,7 @@ public class RouteGenerator {
         this.allPlaces = allPlaces;
     }
     public List<Point> generateRoute() {
-        if (allPlaces.isEmpty() || placesAmountNeeded < 2) {
+        if (allPlaces.isEmpty() || placesAmountNeeded < 1) {
             return new ArrayList<>();
         }
 
