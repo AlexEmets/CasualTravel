@@ -31,7 +31,7 @@ public class Answer implements Serializable {
 //    private List<Interest> interests;
 
     @ManyToOne
-    @JoinColumn(name = "interstID", nullable = false)
+    @JoinColumn(name = "interstID")
     private Interest interest;
 
 
@@ -55,6 +55,14 @@ public class Answer implements Serializable {
         this.answerText = answerText;
     }
 
+    public Interest getInterest() {
+        return interest;
+    }
+
+    public void setInterest(Interest interest) {
+        this.interest = interest;
+    }
+
     public Question getQuestion() {
         return question;
     }
@@ -63,11 +71,4 @@ public class Answer implements Serializable {
         this.question = question;
     }
 
-    public Interest getInterest() {
-        return interest;
-    }
-
-    public void setInterest(Interest interest) {
-        this.interest = interest;
-    }
 }

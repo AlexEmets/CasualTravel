@@ -4,6 +4,7 @@ public class InterestDTO {
     private Long interestId;
     private String interestName;
     private String imgUrl;
+    private Double wage;
 
     public InterestDTO(Long interestId, String interestName, String imgUrl) {
         this.interestId = interestId;
@@ -33,5 +34,13 @@ public class InterestDTO {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public Double getWage() {
+        return wage;
+    }
+
+    public void setWage(Double wage) {
+        this.wage = wage;
     }
 }
