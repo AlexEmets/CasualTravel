@@ -31,7 +31,7 @@ public class Answer implements Serializable {
 //    private List<Interest> interests;
 
     @ManyToOne
-    @JoinColumn(name = "interstID", nullable = false)
+    @JoinColumn(name = "interstID")
     private Interest interest;
 
 
