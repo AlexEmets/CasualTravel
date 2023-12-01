@@ -30,7 +30,7 @@ public class QuestionDTO {
         QuestionDTO questionDTO = new QuestionDTO(
                 question.getQuestionID(),
                 question.getText(),
-                AnswerDTO.getAbswerDTOByQuestion(question)
+                AnswerDTO.getAnswerDTOByQuestion(question)
         );
         return questionDTO;
     }

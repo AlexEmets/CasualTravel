@@ -63,4 +63,11 @@ public class Answer implements Serializable {
         this.question = question;
     }
 
+    public Interest getInterest() {
+        return interest;
+    }
+
+    public void setInterest(Interest interest) {
+        this.interest = interest;
+    }
 }

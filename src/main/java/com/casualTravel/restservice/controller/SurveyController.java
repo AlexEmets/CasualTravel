@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,18 +20,21 @@ public class SurveyController {
     @Autowired
     private SurveyService surveyService;
 
-    @GetMapping("/autoRoute")
-    public ResponseEntity<SurveyDataOut> getAutoRouteSurvey() {
+    @GetMapping
+    public ResponseEntity<List<SurveyDataOut>> getAutoRouteSurvey() {
         // Логіка для отримання даних опитування
-        Survey survey = surveyService.getSurvey(1L);
+        List<Survey> surveys = surveyService.getAllSurveys();
 
-        SurveyDataOut surveyData = new SurveyDataOut();
-        surveyData.setSurveyName(survey.getSurveyName());
-        surveyData.setSurveyId(survey.getSurveyID());
-        surveyData.setQuestions(QuestionDTO.getQuestionsDTOBySurvey(survey));
+        List<SurveyDataOut> listAllSurveys = new ArrayList<>();
 
-        System.out.println(survey.getQuestions());
-        return new ResponseEntity<>(surveyData, HttpStatus.OK);
+        for (Survey survey : surveys){
+            SurveyDataOut surveyData = new SurveyDataOut();
+            surveyData.setSurveyName(survey.getSurveyName());
+            surveyData.setSurveyId(survey.getSurveyID());
+            surveyData.setQuestions(QuestionDTO.getQuestionsDTOBySurvey(survey));
+            listAllSurveys.add(surveyData);
+        }
+        return new ResponseEntity<>( listAllSurveys, HttpStatus.OK);
     }
 
 

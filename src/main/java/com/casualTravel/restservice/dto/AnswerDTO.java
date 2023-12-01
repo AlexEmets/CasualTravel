@@ -12,8 +12,10 @@ import java.util.List;
 public class AnswerDTO {
     private Long answerId;
     private String answerText;
+    private Long interestId;
+    private String interestName;
 
-    public static List<AnswerDTO> getAbswerDTOByQuestion(Question question) {
+    public static List<AnswerDTO> getAnswerDTOByQuestion(Question question) {
         List<AnswerDTO> answerDTOS = new ArrayList<>();
 
         if (question != null && question.getAnswerOptions() != null) {
@@ -29,24 +31,10 @@ public class AnswerDTO {
     private static AnswerDTO convertAnswerToDTO(Answer answer) {
         AnswerDTO answerDTO = new AnswerDTO(
                 answer.getAnswerID(),
-                answer.getAnswerText()
+                answer.getAnswerText(),
+                answer.getInterest().getInterestID(),
+                answer.getInterest().getName()
         );
         return answerDTO;
-    }
-
-    public Long getAnswerId() {
-        return answerId;
-    }
-
-    public void setAnswerId(Long answerId) {
-        this.answerId = answerId;
-    }
-
-    public String getAnswerText() {
-        return answerText;
-    }
-
-    public void setAnswerText(String answerText) {
-        this.answerText = answerText;
     }
 }
