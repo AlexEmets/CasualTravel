@@ -39,48 +39,11 @@ public class Place {
     private Boolean alley;
     private boolean observationDeck;
 
-
-
-
 //    @ManyToMany(cascade = CascadeType.PERSIST)
 //    @JoinTable(
 //            name = "place_interest",
 //            joinColumns = @JoinColumn(name = "placeId", referencedColumnName = "placeID"),
 
-    @Override
-    public String toString() {
-        return "Point{" +
-            "placeID=" + placeID +
-            ", googleID=" + googleID +
-            ", placeName='" + placeName + '\'' +
-            ", positionX='" + positionX + '\'' +
-            ", positionY='" + positionY + '\'' +
-            ", visitTime=" + visitTime +
-            ", visitCost=" + visitCost +
-            ", childCost=" + childCost +
-            ", preferentialCost=" + preferentialCost +
-            ", sports=" + sports +
-            ", overview=" + overview +
-            ", passiveAction=" + passiveAction +
-            ", educationalAction=" + educationalAction +
-            ", outdoorAction=" + outdoorAction +
-            ", invalid=" + invalid +
-            ", family=" + family +
-            ", mustVisit=" + mustVisit +
-            ", museum=" + museum +
-            ", artCenter=" + artCenter +
-            ", religionObject=" + religionObject +
-            ", architecturalMonument=" + architecturalMonument +
-            ", sculptur=" + sculptur +
-            ", park=" + park +
-            ", naturalNationObject=" + naturalNationObject +
-            ", activeRecreationArea=" + activeRecreationArea +
-            ", alley=" + alley +
-            ", observationDeck=" + observationDeck +
-            ", interests=" + interests +
-            ", userPlaces=" + userPlaces +
-            '}';
-    }
 //            inverseJoinColumns = @JoinColumn(name = "interestId", referencedColumnName = "interestID")
 //    )
 //    private List<Interest> interests;
@@ -370,5 +333,41 @@ public class Place {
 
     public void setUserPlaces(List<UserPlace> userPlaces) {
         this.userPlaces = userPlaces;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "placeID=" + placeID +
+                ", googleID=" + googleID +
+                ", placeName='" + placeName + '\'' +
+                ", positionX='" + positionX + '\'' +
+                ", positionY='" + positionY + '\'' +
+                ", visitTime=" + visitTime +
+                ", visitCost=" + visitCost +
+                ", childCost=" + childCost +
+                ", preferentialCost=" + preferentialCost +
+                ", sports=" + sports +
+                ", overview=" + overview +
+                ", passiveAction=" + passiveAction +
+                ", educationalAction=" + educationalAction +
+                ", outdoorAction=" + outdoorAction +
+                ", invalid=" + invalid +
+                ", family=" + family +
+                ", mustVisit=" + mustVisit +
+                ", museum=" + museum +
+                ", artCenter=" + artCenter +
+                ", religionObject=" + religionObject +
+                ", architecturalMonument=" + architecturalMonument +
+                ", sculptur=" + sculptur +
+                ", park=" + park +
+                ", naturalNationObject=" + naturalNationObject +
+                ", activeRecreationArea=" + activeRecreationArea +
+                ", alley=" + alley +
+                ", observationDeck=" + observationDeck +
+                ", interests=" + interests +
+                ", userPlaces=" + userPlaces +
+                '}';
     }
 }

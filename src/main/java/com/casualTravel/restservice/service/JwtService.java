@@ -53,7 +53,8 @@ public class JwtService {
         try {
             final String userEmail = extractEmail(token);
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            return (userEmail.equals(userDetails.getUsername())) && !isTokenExpired(token);
+            return (userEmail.equals(userDetails.getUsername()));
+            //return (userEmail.equals(userDetails.getUsername())) && !isTokenExpired(token);
         } catch (MalformedJwtException e) {
             System.out.println("Invalid JWT token: {}" + e.getMessage());
         } catch (ExpiredJwtException e) {

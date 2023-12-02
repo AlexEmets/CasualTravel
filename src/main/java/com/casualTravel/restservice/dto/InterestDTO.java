@@ -1,10 +1,36 @@
 package com.casualTravel.restservice.dto;
 
+import com.casualTravel.restservice.models.Interest;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class InterestDTO {
     private Long interestId;
     private String interestName;
     private String imgUrl;
     private Double wage;
+
+    public static List<InterestDTO> getInterestsDTO(Map<Interest, Double> interests) {
+        List<InterestDTO> interestDTOList = new ArrayList<>();
+
+        for (Map.Entry<Interest, Double> entry : interests.entrySet()) {
+            Interest interest = entry.getKey();
+            InterestDTO interestDTO = InterestDTO.mapToInterestDTO(interest);
+            interestDTO.setWage(entry.getValue());
+            interestDTOList.add(interestDTO);
+        }
+        return interestDTOList;
+    }
+
+    public static InterestDTO mapToInterestDTO(Interest interest) {
+        return new InterestDTO(
+                interest.getInterestID(),
+                interest.getName(),
+                interest.getImageURL()
+        );
+    }
 
     public InterestDTO(Long interestId, String interestName, String imgUrl) {
         this.interestId = interestId;

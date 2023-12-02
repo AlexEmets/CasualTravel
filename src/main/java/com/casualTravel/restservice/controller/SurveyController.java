@@ -1,10 +1,13 @@
 package com.casualTravel.restservice.controller;
 
-import com.casualTravel.restservice.dto.QuestionDTO;
-import com.casualTravel.restservice.dto.SurveyDataOut;
+import com.casualTravel.restservice.dto.*;
+import com.casualTravel.restservice.models.Interest;
 import com.casualTravel.restservice.models.Place;
 import com.casualTravel.restservice.models.Survey;
+import com.casualTravel.restservice.models.User;
+import com.casualTravel.restservice.service.JwtService;
 import com.casualTravel.restservice.service.SurveyService;
+import com.casualTravel.restservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +17,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/survey")
+@RequestMapping("/surveys")
 public class SurveyController {
 
     @Autowired
     private SurveyService surveyService;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<List<SurveyDataOut>> getAutoRouteSurvey() {
@@ -36,6 +45,23 @@ public class SurveyController {
         }
         return new ResponseEntity<>( listAllSurveys, HttpStatus.OK);
     }
+
+    @PostMapping("/profile/answers")
+    public ResponseEntity<UserDTO> getAutoRoutePlaces(@RequestBody List<AnswerDTO> answers, @RequestHeader("Authorization") String authorizationHeader) {
+
+        User user = new User();
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7); // "Bearer ".length()
+            String userEmail = jwtService.extractEmail(token);
+            user = (User) userService.loadUserByUsername(userEmail);
+        } else user = null;
+
+        User advancedUser = userService.addInterestsByAnswers(user, answers);
+        UserDTO userDTO = UserDTO.mapToUserDTO(advancedUser);
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
 
 
 }

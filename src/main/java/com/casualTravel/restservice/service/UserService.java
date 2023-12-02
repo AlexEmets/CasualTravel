@@ -1,5 +1,6 @@
 package com.casualTravel.restservice.service;
 
+import com.casualTravel.restservice.dto.AnswerDTO;
 import com.casualTravel.restservice.dto.AuthenticationRequest;
 import com.casualTravel.restservice.dto.AuthenticationResponse;
 import com.casualTravel.restservice.dto.RegisterRequest;
@@ -21,7 +22,8 @@ import org.springframework.stereotype.Service;
 import com.casualTravel.restservice.models.*;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class UserService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final InterestService interestService;
     private final AuthenticationManager authenticationManager;
 
     public User createUser(User user) {
@@ -53,6 +56,33 @@ public class UserService implements UserDetailsService {
 
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    public User addInterestsByAnswers(User user, List<AnswerDTO> answers) {
+        Map<Long, Long> interestIdCounts = answers.stream()
+                .collect(Collectors.groupingBy(AnswerDTO::getInterestId, Collectors.counting()));
+
+        long totalAnswers = answers.size();
+
+        // Оновити поле interests користувача
+        Map<Interest, Double> updatedInterests = new HashMap<>();
+        interestIdCounts.forEach((interestId, count) -> {
+            // Отримати Interest за interestId
+            Interest interest = interestService.getInterestById(interestId).orElse(null);
+
+            if (interest != null) {
+                // Обчислити вагу для даного Interest
+                double weight = (double) count / totalAnswers;
+
+                // Додати в оновлену Map
+                updatedInterests.put(interest, weight);
+            }
+        });
+
+        // Оновити поле interests користувача
+        user.setInterests(updatedInterests);
+        userRepository.save(user);
+        return user;
     }
 
     public void addInterestToUser(Long userId, Long interestId) {

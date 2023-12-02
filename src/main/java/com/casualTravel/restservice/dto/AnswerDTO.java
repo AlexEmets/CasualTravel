@@ -37,4 +37,36 @@ public class AnswerDTO {
         );
         return answerDTO;
     }
+
+    public Long getAnswerId() {
+        return answerId;
+    }
+
+    public void setAnswerId(Long answerId) {
+        this.answerId = answerId;
+    }
+
+    public String getAnswerText() {
+        return answerText;
+    }
+
+    public void setAnswerText(String answerText) {
+        this.answerText = answerText;
+    }
+
+    public Long getInterestId() {
+        return interestId;
+    }
+
+    public void setInterestId(Long interestId) {
+        this.interestId = interestId;
+    }
+
+    public String getInterestName() {
+        return interestName;
+    }
+
+    public void setInterestName(String interestName) {
+        this.interestName = interestName;
+    }
 }

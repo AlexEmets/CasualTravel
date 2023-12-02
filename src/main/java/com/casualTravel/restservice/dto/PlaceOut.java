@@ -1,5 +1,7 @@
 package com.casualTravel.restservice.dto;
 
+import com.casualTravel.restservice.models.Place;
+
 import java.util.List;
 
 public class PlaceOut {
@@ -20,6 +22,21 @@ public class PlaceOut {
         this.visitTime = visitTime;
         this.visitCost = visitCost;
         this.categories = categories;
+    }
+
+    public static PlaceOut mapToPlaceResponseDTO(Place place) {
+        LocationDTO location = new LocationDTO(place.getPositionX(), place.getPositionY());
+        List<InterestDTO> interestDTOs = InterestDTO.getInterestsDTO(place.getInterests());
+
+        return new PlaceOut(
+                place.getPlaceID(),
+                place.getGoogleID(),
+                place.getPlaceName(),
+                location,
+                place.getVisitTime(),
+                place.getVisitCost(),
+                interestDTOs
+        );
     }
 
     public Long getPlaceId() {
