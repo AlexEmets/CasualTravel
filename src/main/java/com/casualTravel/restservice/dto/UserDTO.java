@@ -3,9 +3,7 @@ package com.casualTravel.restservice.dto;
 import com.casualTravel.restservice.models.Achievement;
 import com.casualTravel.restservice.models.User;
 import com.casualTravel.restservice.models.UserPlace;
-
 import java.util.List;
-import java.util.Map;
 
 public class UserDTO {
     private Long userID;

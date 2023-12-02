@@ -1,5 +1,6 @@
 package com.casualTravel.restservice.controller;
 
+import com.casualTravel.restservice.dto.UserDTO;
 import com.casualTravel.restservice.models.User;
 import com.casualTravel.restservice.service.JwtService;
 import com.casualTravel.restservice.service.UserService;
@@ -20,13 +21,14 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public User getUserByToken(@RequestHeader("Authorization") String authorizationHeader) {
+    public UserDTO getUserByToken(@RequestHeader("Authorization") String authorizationHeader) {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7); // "Bearer ".length()
 
             String userEmail = jwtService.extractEmail(token);
+            User user = (User) userService.loadUserByUsername(userEmail);
 
-            return (User) userService.loadUserByUsername(userEmail);
+            return UserDTO.mapToUserDTO(user);
         }
         System.err.println("Token not found");
         return null;
