@@ -2,11 +2,11 @@ package com.casualTravel.restservice.dto;
 
 public class LocationDTO {
     private Double latitude;
-    private Double longtitude;
+    private Double longitude;
 
     public LocationDTO(Double x, Double y) {
         this.latitude = x;
-        this.longtitude = y;
+        this.longitude = y;
     }
 
     public Double getLatitude() {
@@ -17,11 +17,11 @@ public class LocationDTO {
         this.latitude = x;
     }
 
-    public Double getLongtitude() {
-        return longtitude;
+    public Double getLongitude() {
+        return longitude;
     }
 
-    public void setLongtitude(Double y) {
-        this.longtitude = y;
+    public void setLongitude(Double y) {
+        this.longitude = y;
     }
 }
