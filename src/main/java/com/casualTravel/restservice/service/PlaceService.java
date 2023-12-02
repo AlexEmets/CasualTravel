@@ -1,7 +1,6 @@
 package com.casualTravel.restservice.service;
 
 import com.casualTravel.restservice.dto.AutoRouteAnswerIn;
-import com.casualTravel.restservice.dto.InterestDTO;
 import com.casualTravel.restservice.models.*;
 import com.casualTravel.restservice.repository.PlaceRepository;
 import com.casualTravel.restservice.repository.UserPlaceRepository;
@@ -9,7 +8,6 @@ import com.casualTravel.restservice.utils.Point;
 import com.casualTravel.restservice.utils.RouteGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.*;
 

@@ -1,14 +1,11 @@
 package com.casualTravel.restservice.service;
 
 import com.casualTravel.restservice.models.Achievement;
-import com.casualTravel.restservice.models.Interest;
 import com.casualTravel.restservice.models.User;
 import com.casualTravel.restservice.repository.AchievementRepository;
 import com.casualTravel.restservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -18,11 +15,6 @@ public class AchievementService {
 
     private final AchievementRepository achievementRepository;
     private final UserRepository userRepository;
-
-//    @Autowired
-//    public AchievementService(AchievementRepository achievementRepository) {
-//        this.achievementRepository = achievementRepository;
-//    }
 
     public List<Achievement> getAllAchievements() {
         return achievementRepository.findAll();
@@ -51,10 +43,6 @@ public class AchievementService {
             throw new IllegalArgumentException("Achievement with ID " + achievementId + " not found");
         }
     }
-
-//    public Achievement updateAchievement(Achievement achievement) {
-//        return achievementRepository.save(achievement);
-//    }
 
     public void deleteAchievement(Long achievementId) {
         achievementRepository.deleteById(achievementId);

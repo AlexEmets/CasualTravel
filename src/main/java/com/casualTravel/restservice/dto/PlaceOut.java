@@ -25,7 +25,7 @@ public class PlaceOut {
     }
 
     public static PlaceOut mapToPlaceResponseDTO(Place place) {
-        LocationDTO location = new LocationDTO(place.getPositionX(), place.getPositionY());
+        LocationDTO location = new LocationDTO(Double.parseDouble(place.getPositionX()), Double.parseDouble(place.getPositionY()));
         List<InterestDTO> interestDTOs = InterestDTO.getInterestsDTO(place.getInterests());
 
         return new PlaceOut(

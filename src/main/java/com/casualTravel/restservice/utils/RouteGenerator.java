@@ -30,7 +30,7 @@ public class RouteGenerator {
         this.isOutdoorPlacesNeeded = surveyAnswers.getOutdoorAction();
         this.priceLevelNeeded = surveyAnswers.getPriceLevel();
 
-        Point startPoint = new Point("Стартова точка", Double.parseDouble(surveyAnswers.getStartLocation().getX()),Double.parseDouble(surveyAnswers.getStartLocation().getY()), 0, 0, 0, 0,
+        Point startPoint = new Point("Стартова точка", surveyAnswers.getStartLocation().getLatitude(),surveyAnswers.getStartLocation().getLongtitude(), 0, 0, 0, 0,
                 surveyAnswers.getMustVisitWeight(), surveyAnswers.getOutdoorAction(), surveyAnswers.getPriceLevel());
         places.add(0, startPoint);
 
