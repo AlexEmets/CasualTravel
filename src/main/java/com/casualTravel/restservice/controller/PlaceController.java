@@ -8,6 +8,9 @@ import com.casualTravel.restservice.models.*;
 import com.casualTravel.restservice.service.JwtService;
 import com.casualTravel.restservice.service.PlaceService;
 import com.casualTravel.restservice.service.UserService;
+import com.casualTravel.restservice.dto.*;
+import com.casualTravel.restservice.models.*;
+import com.casualTravel.restservice.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +33,7 @@ public class PlaceController {
     public ResponseEntity<List<PlaceOut>> getPlaces() {
         List<Place> places = placeService.getAllPlaces();
         List<PlaceOut> responseDTOs = places.stream()
-                .map(this::mapToPlaceResponseDTO)
+                .map(PlaceOut::mapToPlaceResponseDTO)
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
@@ -50,25 +53,12 @@ public class PlaceController {
 
         // Мапте список Point в список PlaceOut
         List<PlaceOut> responseDTOs = places.stream()
-                .map(this::mapToPlaceResponseDTO)
+                .map(PlaceOut::mapToPlaceResponseDTO)
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
 
-    private PlaceOut mapToPlaceResponseDTO(Place place) {
-        LocationDTO location = new LocationDTO(place.getPositionX(), place.getPositionY());
-        List<InterestDTO> interestDTOs = placeService.getInterestsDTO(place.getInterests());
 
-        return new PlaceOut(
-                place.getPlaceID(),
-                place.getGoogleID(),
-                place.getPlaceName(),
-                location,
-                place.getVisitTime(),
-                place.getVisitCost(),
-                interestDTOs
-        );
-    }
 
 }

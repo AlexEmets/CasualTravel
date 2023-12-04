@@ -26,7 +26,7 @@ public class QuestionService {
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
     }
 
-    public List<Question> listQuestions() {
+    public List<Question> getAllQuestions() {
         return (List<Question>) questionRepository.findAll();
     }
 
@@ -40,6 +40,7 @@ public class QuestionService {
     public void deleteQuestion(Long questionID) {
         questionRepository.deleteById(questionID);
     }
+
     public void addToSurveyUsingGetById(Long questionId,Long surveyId) {
         Survey survey = surveyRepository.getById(surveyId);
         Question question = questionRepository.getById(questionId);

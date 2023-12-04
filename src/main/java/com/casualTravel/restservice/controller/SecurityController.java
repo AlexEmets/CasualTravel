@@ -24,6 +24,7 @@ public class SecurityController {
     ) throws Exception {
         return ResponseEntity.ok(userService.register(request));
     }
+
     @PostMapping("/sign-in")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request

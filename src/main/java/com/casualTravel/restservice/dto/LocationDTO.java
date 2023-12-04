@@ -1,27 +1,27 @@
 package com.casualTravel.restservice.dto;
 
 public class LocationDTO {
-    private String x;
-    private String y;
+    private Double latitude;
+    private Double longitude;
 
-    public LocationDTO(String x, String y) {
-        this.x = x;
-        this.y = y;
+    public LocationDTO(Double x, Double y) {
+        this.latitude = x;
+        this.longitude = y;
     }
 
-    public String getX() {
-        return x;
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public void setX(String x) {
-        this.x = x;
+    public void setLatitude(Double x) {
+        this.latitude = x;
     }
 
-    public String getY() {
-        return y;
+    public Double getLongitude() {
+        return longitude;
     }
 
-    public void setY(String y) {
-        this.y = y;
+    public void setLongitude(Double y) {
+        this.longitude = y;
     }
 }

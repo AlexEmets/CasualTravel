@@ -6,9 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 
 @Entity
@@ -25,13 +23,20 @@ public class User implements Serializable, UserDetails {
     private String avatar;
     private Integer betterThenPercentages;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "user_interest",
-            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userID"),
-            inverseJoinColumns = @JoinColumn(name = "interestId", referencedColumnName = "interestID")
-    )
-    private List<Interest> interests;
+//    @ManyToMany(cascade = CascadeType.PERSIST)
+//    @JoinTable(
+//            name = "user_interest",
+//            joinColumns = @JoinColumn(name = "userId", referencedColumnName = "userID"),
+//            inverseJoinColumns = @JoinColumn(name = "interestId", referencedColumnName = "interestID")
+//    )
+//    private List<Interest> interests;
+
+    @ElementCollection
+    @CollectionTable(name="user_interest", joinColumns = @JoinColumn(name = "userId"))
+    @MapKeyJoinColumn(name = "interestId")
+    @Column(name = "interest_weight")
+    private Map<Interest, Double> interests = new HashMap<>();
+
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "user_achievementID",
@@ -39,6 +44,7 @@ public class User implements Serializable, UserDetails {
             inverseJoinColumns = @JoinColumn(name = "achievementId", referencedColumnName = "achievementId")
     )
     private List<Achievement> achievements;
+
     @OneToMany(mappedBy = "user")
     private List<UserPlace> userPlaces;
 
@@ -46,14 +52,12 @@ public class User implements Serializable, UserDetails {
 
     }
 
-    public User(Long userID, String username,  String email, String password, String avatar, List<Interest> interests, List<Achievement> achievements) {
+    public User(Long userID, String username,  String email, String password, String avatar) {
         this.userID = userID;
         this.username = username;
         this.password = password;
         this.email = email;
         this.avatar = avatar;
-        this.interests = interests;
-        this.achievements = achievements;
     }
 
     public Long getUserID() {
@@ -66,6 +70,10 @@ public class User implements Serializable, UserDetails {
 
     public String getUsername() {
         return email;
+    }
+
+    public String getUserNameName() {
+        return username;
     }
 
     public void setUsername(String username) {
@@ -96,7 +104,23 @@ public class User implements Serializable, UserDetails {
         this.avatar = avatar;
     }
 
-    public List<Interest> getInterests() {
+    public Integer getBetterThenPercentages() {
+        return betterThenPercentages;
+    }
+
+    public void setBetterThenPercentages(Integer betterThenPercentages) {
+        this.betterThenPercentages = betterThenPercentages;
+    }
+
+    public List<UserPlace> getUserPlaces() {
+        return userPlaces;
+    }
+
+    public void setUserPlaces(List<UserPlace> userPlaces) {
+        this.userPlaces = userPlaces;
+    }
+
+    public Map<Interest, Double> getInterests() {
         return interests;
     }
 
@@ -108,23 +132,23 @@ public class User implements Serializable, UserDetails {
         this.achievements = achievements;
     }
 
-    public void setInterests(List<Interest> interests) {
+    public void setInterests(Map<Interest, Double> interests) {
         this.interests = interests;
     }
 
     public void addInterest(Interest interest) {
-        if (interests == null) {
-            interests = new ArrayList<>();
-        }
-        if (!interests.contains(interest)) {
-            interests.add(interest);
-        }
+//        if (interests == null) {
+//            interests = new HashMap<>();
+//        }
+//        if (!interests.contains(interest)) {
+//            interests.add(interest);
+//        }
     }
 
     public void removeInterest(Interest interest) {
-        if (interests != null && interests.contains(interest)) {
-            interests.remove(interest);
-        }
+//        if (interests != null && interests.contains(interest)) {
+//            interests.remove(interest);
+//        }
     }
 
     public void addAchievement(Achievement achievement) {

@@ -1,7 +1,6 @@
 package com.casualTravel.restservice.service;
 
 import com.casualTravel.restservice.dto.AutoRouteAnswerIn;
-import com.casualTravel.restservice.dto.InterestDTO;
 import com.casualTravel.restservice.models.*;
 import com.casualTravel.restservice.repository.PlaceRepository;
 import com.casualTravel.restservice.repository.UserPlaceRepository;
@@ -9,7 +8,6 @@ import com.casualTravel.restservice.utils.Point;
 import com.casualTravel.restservice.utils.RouteGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -70,26 +68,6 @@ public class PlaceService {
 //                interest.getImageURL()
 //        );
 //    }
-
-    public List<InterestDTO> getInterestsDTO(Map<Interest, Double> interests) {
-        List<InterestDTO> interestDTOList = new ArrayList<>();
-
-        for (Map.Entry<Interest, Double> entry : interests.entrySet()) {
-            Interest interest = entry.getKey();
-            InterestDTO interestDTO = mapToInterestDTO(interest);
-            interestDTO.setWage(entry.getValue());
-            interestDTOList.add(interestDTO);
-        }
-        return interestDTOList;
-    }
-
-    private InterestDTO mapToInterestDTO(Interest interest) {
-        return new InterestDTO(
-                interest.getInterestID(),
-                interest.getName(),
-                interest.getImageURL()
-        );
-    }
 
     public List<Place> autoGenerateRoute(AutoRouteAnswerIn autoRouteAnswerIn, User user)
     {

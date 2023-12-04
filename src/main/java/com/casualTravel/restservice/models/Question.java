@@ -1,4 +1,5 @@
 package com.casualTravel.restservice.models;
+import com.casualTravel.restservice.dto.AnswerDTO;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;

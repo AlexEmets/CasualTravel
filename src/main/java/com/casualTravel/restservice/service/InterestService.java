@@ -6,7 +6,6 @@ import com.casualTravel.restservice.repository.InterestRepository;
 import com.casualTravel.restservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -14,12 +13,6 @@ import java.util.Optional;
 public class InterestService {
     private final InterestRepository interestRepository;
     private final UserRepository userRepository;
-
-//    @Autowired
-//    public InterestService(InterestRepository interestRepository, UserRepository userRepository) {
-//        this.interestRepository = interestRepository;
-//        this.userRepository = userRepository;
-//    }
 
     public Interest createInterest(Interest interest) {
         return interestRepository.save(interest);
@@ -33,9 +26,6 @@ public class InterestService {
         return interestRepository.findById(interestId);
     }
 
-//    public void updateInterest(Interest interest) {
-//        interestRepository.save(interest);
-//    }
     public Interest updateInterest(Long interestId, Interest updatedInterest) {
         Optional<Interest> existingInterestOptional = interestRepository.findById(interestId);
 
